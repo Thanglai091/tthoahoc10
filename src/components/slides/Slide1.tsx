@@ -129,14 +129,17 @@ export default function Slide1() {
       ))}
 
       {/* Light Flare Burst in the center on load */}
-      <motion.div 
-         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-orange-500 rounded-full mix-blend-screen filter blur-[100px] pointer-events-none z-20"
-         initial={{ opacity: 0, scale: 0.5 }}
-         animate={{ opacity: [0, 0.8, 0], scale: [0.5, 1.5, 2] }}
-         transition={{ duration: 3, ease: "easeOut", delay: 0.5 }}
-      />
+      {isMounted && (
+        <motion.div 
+           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-orange-500 rounded-full mix-blend-screen filter blur-[100px] pointer-events-none z-20"
+           initial={{ opacity: 0, scale: 0.5 }}
+           animate={{ opacity: [0, 0.8, 0], scale: [0.5, 1.5, 2] }}
+           transition={{ duration: 3, ease: "easeOut", delay: 0.5 }}
+        />
+      )}
 
       {/* Main Content Reveal - Flip Container */}
+      {isMounted && (
       <motion.div 
         className="relative z-30 w-full max-w-6xl h-[80vh] perspective-[2500px]"
         initial={{ opacity: 0 }}
@@ -292,6 +295,7 @@ export default function Slide1() {
 
         </motion.div>
       </motion.div>
+      )}
     </div>
   );
 }
