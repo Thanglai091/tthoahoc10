@@ -14,7 +14,7 @@ export function VideoPlayer({ videoId, thumbnailUrl, title = "Video" }: VideoPla
   const [isPlaying, setIsPlaying] = useState(false);
 
   return (
-    <div className="relative w-full h-[60vh] max-w-4xl max-h-[600px] border-4 border-red-600/50 rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(220,38,38,0.3)] mx-auto">
+    <div className="relative w-full h-full">
       {!isPlaying ? (
         <div 
           className="absolute inset-0 bg-black/60 flex items-center justify-center cursor-pointer group"

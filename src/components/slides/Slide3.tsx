@@ -1,28 +1,13 @@
 "use client";
 
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import React from "react";
 import { AlertTriangle, Ghost } from "lucide-react";
 
 export default function Slide3() {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    x.set((e.clientX - centerX) / 30);
-    y.set((e.clientY - centerY) / 30);
-  };
-
-  const rotateX = useTransform(y, (val) => val * -1);
-  const rotateY = useTransform(x, (val) => val);
-
   return (
     <div 
       className="relative w-full h-[100vh] flex flex-col items-center justify-center p-12 bg-[#020617] overflow-hidden font-sans perspective-[2000px]"
-      onMouseMove={handleMouseMove}
     >
       {/* Background Holographic Grid */}
       <div 
@@ -33,10 +18,9 @@ export default function Slide3() {
       {/* Glow from the "floor" */}
       <div className="absolute bottom-[-20%] w-[120%] h-[50%] bg-green-500/10 blur-[100px] rounded-full pointer-events-none" />
 
-      {/* Main Container tracking mouse */}
+      {/* Main Container */}
       <motion.div 
         className="relative z-10 w-full max-w-7xl flex flex-col items-center justify-center transform-style-3d"
-        style={{ rotateX, rotateY }}
       >
         
         <motion.div
@@ -67,7 +51,7 @@ export default function Slide3() {
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-red-500/10 to-transparent h-[10px] w-full animate-[scanline_2s_linear_infinite]" />
             
             <Ghost className="w-16 h-16 text-red-500 mb-6 drop-shadow-[0_0_15px_rgba(239,68,68,0.8)]" />
-            <h3 className="text-3xl font-bold text-red-100 mb-4 font-mono">/ Khí Ẩn Chứa</h3>
+            <h3 className="text-3xl font-bold text-red-100 mb-4 font-mono">/ Khí độc ẩn chứa</h3>
             <p className="text-xl text-zinc-300 leading-relaxed font-light">
               Sinh ra các luồng khí độc như <strong className="text-red-400">CO, HCN, HCl, SO₂...</strong> lan tỏa vô hình. Chúng ngấm vào không khí, gây nghẹt thở và tổn thương trực tiếp cho sinh vật trong khu vực.
             </p>
@@ -87,7 +71,7 @@ export default function Slide3() {
                <div className="w-6 h-6 bg-blue-400 rounded-full" />
             </div>
             
-            <h3 className="text-3xl font-bold text-blue-100 mb-4 font-mono">/ Khí Hậu Cầu</h3>
+            <h3 className="text-3xl font-bold text-blue-100 mb-4 font-mono">/ Khí hậu toàn cầu</h3>
             <p className="text-xl text-zinc-300 leading-relaxed font-light">
               Tác nhân khổng lồ thầm lặng gây ra <strong className="text-blue-400">hiệu ứng nhà kính</strong> và <strong className="text-blue-400">biến đổi khí hậu</strong> toàn cầu, phá vỡ hệ thống sinh thái tự nhiên dài hạn.
             </p>
