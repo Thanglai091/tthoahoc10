@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { ThemeToggle } from "./ThemeToggle";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 
 // Thay the import that we will build later
@@ -39,7 +38,6 @@ export function Presentation({ children, slides }: { children?: React.ReactNode,
 
   return (
     <div className="relative w-[100vw] h-[100vh] overflow-hidden bg-background text-foreground transition-colors duration-300">
-      <ThemeToggle />
       
       {/* Slide Content */}
       <div className="w-full h-full flex items-center justify-center">
