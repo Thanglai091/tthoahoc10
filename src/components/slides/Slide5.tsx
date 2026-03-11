@@ -80,15 +80,15 @@ export default function Slide5() {
 
         {/* The Frame Container */}
         <motion.div 
-          className="relative w-full aspect-video max-w-5xl rounded-[24px]"
+          className="relative w-full max-w-5xl rounded-[24px] p-[4px]"
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 1.2, delay: 0.5, type: "spring", bounce: 0.4 }}
         >
           {/* Animated Glowing Border using a moving gradient */}
-          <div className="absolute inset-[-4px] bg-gradient-to-r from-red-600 via-orange-500 to-yellow-500 rounded-[24px] blur-md opacity-70 animate-[gradient_4s_ease_infinite] bg-[length:200%_200%]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-red-600 via-orange-500 to-yellow-500 rounded-[28px] blur-md opacity-70 animate-[gradient_4s_ease_infinite] bg-[length:200%_200%]" />
           
-          <div className="relative w-full h-full bg-black rounded-[20px] overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] z-10">
+          <div className="relative w-full aspect-video bg-black rounded-[20px] overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] z-10">
             {/* Glossy Reflection overlay */}
             <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none rounded-[20px] z-20" />
             

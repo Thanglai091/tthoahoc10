@@ -46,24 +46,26 @@ export default function Slide10() {
         [ MÔ PHỎNG SỨC ÉP VẬT LÝ ]
       </motion.h2>
 
-      <div className="relative w-full aspect-video max-w-5xl rounded-2xl flex items-center justify-center">
+      <div className="relative w-full max-w-5xl rounded-2xl flex items-center justify-center">
         {/* Neon Border SVG Trace */}
-        <svg className="absolute inset-[-4px] w-[calc(100%+8px)] h-[calc(100%+8px)] pointer-events-none" preserveAspectRatio="none">
-          <motion.rect
-            x="2" y="2" width="calc(100% - 4px)" height="calc(100% - 4px)" rx="16" ry="16"
-            fill="none"
-            stroke="#06b6d4" // Cyan-500
-            strokeWidth="4"
-            className="drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]"
-            initial={{ pathLength: 0, opacity: 1 }}
-            animate={{ pathLength: 1, opacity: showVideo ? 0.2 : 1 }}
-            transition={{ duration: 2, ease: "easeInOut", opacity: { delay: 2.5, duration: 1 } }}
-          />
-        </svg>
+        <div className="absolute inset-0 w-full h-full pointer-events-none">
+          <svg className="w-full h-full" preserveAspectRatio="none">
+            <motion.rect
+              x="2" y="2" width="calc(100% - 4px)" height="calc(100% - 4px)" rx="16" ry="16"
+              fill="none"
+              stroke="#06b6d4" // Cyan-500
+              strokeWidth="4"
+              className="drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]"
+              initial={{ pathLength: 0, opacity: 1 }}
+              animate={{ pathLength: 1, opacity: showVideo ? 0.2 : 1 }}
+              transition={{ duration: 2, ease: "easeInOut", opacity: { delay: 2.5, duration: 1 } }}
+            />
+          </svg>
+        </div>
 
         {/* Video Player appearing */}
         <motion.div 
-          className="w-full h-full absolute inset-0 z-10"
+          className="w-full aspect-video z-10"
           initial={{ opacity: 0, filter: "brightness(0)" }}
           animate={showVideo ? { opacity: 1, filter: "brightness(1)" } : {}}
           transition={{ duration: 1 }}
