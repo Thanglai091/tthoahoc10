@@ -73,6 +73,7 @@ export default function GameResult({
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center px-6">
+      <audio src="/audio/winner.mp3" autoPlay />
       {/* Glow */}
       <motion.div
         className="absolute inset-0 pointer-events-none"

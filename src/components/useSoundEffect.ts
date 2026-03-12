@@ -102,32 +102,7 @@ export function useSoundEffect() {
           break;
 
         case "success":
-          // Fanfare chord
-          const chords = [
-            [523.25, 659.25, 783.99, 1046.50], // C major
-            [587.33, 698.46, 880.00, 1174.66], // D minor
-            [659.25, 830.61, 987.77, 1318.51], // E major
-            [1046.50, 1318.51, 1567.98, 2093.00] // High C major
-          ];
-          
-          chords.forEach((chord, step) => {
-            const time = now + step * 0.15;
-            chord.forEach((freq) => {
-               const chordOsc = ctx.createOscillator();
-               chordOsc.type = "sine";
-               chordOsc.frequency.setValueAtTime(freq, time);
-               chordOsc.connect(gainNode);
-               chordOsc.start(time);
-               chordOsc.stop(time + (step === chords.length - 1 ? 0.6 : 0.15));
-            });
-            gainNode.gain.setValueAtTime(0, time - 0.01);
-            gainNode.gain.linearRampToValueAtTime(0.2 * sfxVolume, time + 0.02);
-            if (step === chords.length - 1) {
-              gainNode.gain.exponentialRampToValueAtTime(0.01 * sfxVolume, time + 0.6);
-            } else {
-              gainNode.gain.exponentialRampToValueAtTime(0.05 * sfxVolume, time + 0.15);
-            }
-          });
+          // Success audio is now handled via an HTML Audio Element directly in GameResult.tsx
           break;
           
         case "start":
