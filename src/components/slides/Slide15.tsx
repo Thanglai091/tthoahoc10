@@ -78,10 +78,11 @@ export default function Slide15() {
       // Wait for particles to rush to center, then explode
       const timer = setTimeout(() => {
         setPhase(2);
+        play("explosion");
       }, 800);
       return () => clearTimeout(timer);
     }
-  }, [phase]);
+  }, [phase, play]);
 
   const handleIgnite = () => {
     if (phase === 0) { play("click"); setPhase(1); }

@@ -12,8 +12,11 @@ export default function Slide14() {
 
   const handleDetonate = () => {
     if (detonated) return;
-    play("click");
-    setDetonated(true);
+    play("scan");
+    setTimeout(() => {
+      setDetonated(true);
+      play("explosion");
+    }, 1000);
   };
 
   return (

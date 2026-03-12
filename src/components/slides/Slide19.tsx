@@ -3,8 +3,10 @@
 import { motion } from "framer-motion";
 import { Coffee, Wheat, Drill, Factory } from "lucide-react";
 import { useState } from "react";
+import { useSoundEffect } from "../useSoundEffect";
 
 export default function Slide19() {
+  const { play } = useSoundEffect();
   const [activeTab, setActiveTab] = useState<number | null>(null);
 
   const categories = [
@@ -74,7 +76,10 @@ export default function Slide19() {
             initial={{ opacity: 0, y: 100, rotateX: 45 }}
             animate={{ opacity: 1, y: 0, rotateX: 0 }}
             transition={{ duration: 1, delay: idx * 0.2, type: "spring", bounce: 0.4 }}
-            onHoverStart={() => setActiveTab(cat.id)}
+            onHoverStart={() => {
+              play("hover");
+              setActiveTab(cat.id);
+            }}
             onHoverEnd={() => setActiveTab(null)}
           >
             {/* Outline Glow container */}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import GameIntro from "./GameIntro";
 import GameMenu from "./GameMenu";
@@ -10,8 +10,9 @@ import Game2_PhanLoaiNo from "./games/Game2_PhanLoaiNo";
 import Game3_60Giay from "./games/Game3_60Giay";
 import Game4_NhietDo from "./games/Game4_NhietDo";
 import Game5_TrueFalse from "./games/Game5_TrueFalse";
-import { X } from "lucide-react";
+import { X, Volume2, VolumeX, Volume1, Music, Music2 } from "lucide-react";
 import { useSoundEffect } from "../useSoundEffect";
+import { useAudioState } from "../AudioProvider";
 
 export type GameScreen =
   | "intro"
@@ -44,8 +45,31 @@ const pageTransition = {
 
 export default function GameOverlay({ onClose }: GameOverlayProps) {
   const { play } = useSoundEffect();
+  const { sfxVolume, setSfxVolume, bgmVolume, setBgmVolume } = useAudioState();
   const [screen, setScreen] = useState<GameScreen>("intro");
   const [scores, setScores] = useState<GameScores>({});
+  
+  const bgmRef = useRef<HTMLAudioElement>(null);
+
+  useEffect(() => {
+    if (bgmRef.current) {
+      bgmRef.current.volume = bgmVolume;
+    }
+  }, [bgmVolume]);
+
+  const toggleSfx = () => {
+    if (sfxVolume >= 0.8) setSfxVolume(0.4);
+    else if (sfxVolume >= 0.4) setSfxVolume(0);
+    else setSfxVolume(0.8);
+    play("click");
+  };
+
+  const toggleBgm = () => {
+    if (bgmVolume >= 0.3) setBgmVolume(0.15);
+    else if (bgmVolume >= 0.15) setBgmVolume(0);
+    else setBgmVolume(0.3);
+    play("click");
+  };
 
   const goToGame = (id: number) => {
     setScreen(`playing:${id}` as GameScreen);
@@ -135,6 +159,44 @@ export default function GameOverlay({ onClose }: GameOverlayProps) {
           <X size={18} />
         </motion.button>
       )}
+
+      {/* Audio Controls */}
+      <div className="absolute top-5 left-5 z-[1001] flex gap-4">
+        <motion.button
+          className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"
+          onClick={toggleSfx}
+          onMouseEnter={() => play("hover")}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          title="Điều chỉnh SFX"
+        >
+          {sfxVolume >= 0.8 ? <Volume2 size={18} /> : 
+           sfxVolume > 0 ? <Volume1 size={18} /> : 
+           <VolumeX size={18} className="opacity-50" />}
+        </motion.button>
+
+        <motion.button
+          className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"
+          onClick={toggleBgm}
+          onMouseEnter={() => play("hover")}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          title="Điều chỉnh Nhạc Nền"
+        >
+          {bgmVolume >= 0.3 ? <Music size={18} /> : 
+           bgmVolume > 0 ? <Music2 size={18} /> : 
+           <Music size={18} className="opacity-50" />}
+        </motion.button>
+      </div>
+
+      {/* Background Music */}
+      <audio 
+        ref={bgmRef}
+        src="/audio/bgm.mp3" 
+        autoPlay 
+        loop 
+        style={{ display: "none" }}
+      />
 
       {/* Main Content */}
       <AnimatePresence mode="wait">

@@ -4,9 +4,11 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Target, RotateCcw } from "lucide-react";
 import { useSoundEffect } from "../useSoundEffect";
+import { useAudioState } from "../AudioProvider";
 
 export default function Slide1() {
   const { play } = useSoundEffect();
+  const { bgmVolume } = useAudioState();
   const [isFlipped, setIsFlipped] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [embers, setEmbers] = useState<{ id: string; x: number; y: number; size: number; delay: number; duration: number; opacity: number }[]>([]);
@@ -43,6 +45,9 @@ export default function Slide1() {
   return (
     <div className="relative w-full h-[100vh] flex items-center justify-center overflow-hidden bg-[#020000] text-white font-sans perspective-[2500px]">
       
+      {/* Background Fire Sound */}
+      <audio src="/audio/fire.mp3" autoPlay loop style={{ display: "none" }} ref={(el) => { if(el) el.volume = Math.min(bgmVolume * 1.5, 1); }} />
+
       {/* Pure CSS Cinematic Fire Background */}
       
       {/* Massive Bottom Fire Core */}

@@ -1,4 +1,5 @@
 import { Presentation } from "@/components/Presentation";
+import { AudioProvider } from "@/components/AudioProvider";
 import Slide1 from "@/components/slides/Slide1";
 import Slide2 from "@/components/slides/Slide2";
 import Slide3 from "@/components/slides/Slide3";
@@ -30,7 +31,9 @@ const slides = [
 export default function Home() {
   return (
     <main className="w-full h-full">
-      <Presentation slides={slides} />
+      <AudioProvider>
+        <Presentation slides={slides} />
+      </AudioProvider>
     </main>
   );
 }

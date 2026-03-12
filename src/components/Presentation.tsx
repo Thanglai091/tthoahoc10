@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { ChevronRight, ChevronLeft } from "lucide-react";
+import { ChevronRight, ChevronLeft, Volume2, VolumeX, Volume1 } from "lucide-react";
 import { useSoundEffect } from "./useSoundEffect";
+import { useAudioState } from "./AudioProvider";
 
 // Thay the import that we will build later
 // import Slide1 from "./slides/Slide1";
@@ -14,6 +15,15 @@ const TOTAL_SLIDES = 20;
 export function Presentation({ children, slides }: { children?: React.ReactNode, slides: React.FC[] }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const { play } = useSoundEffect();
+  const { sfxVolume, setSfxVolume } = useAudioState();
+
+  const handleVolumeToggle = () => {
+    // Cycle volume: 0.8 -> 0.4 -> 0 -> 0.8
+    if (sfxVolume >= 0.8) setSfxVolume(0.4);
+    else if (sfxVolume >= 0.4) setSfxVolume(0);
+    else setSfxVolume(0.8);
+    play("click"); // Audible feedback
+  };
 
   const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => {
@@ -76,6 +86,17 @@ export function Presentation({ children, slides }: { children?: React.ReactNode,
           aria-label="Next slide"
         >
           <ChevronRight className="w-6 h-6" />
+        </button>
+
+        {/* Global Slide SFX Volume Toggle */}
+        <button
+          onClick={handleVolumeToggle}
+          className="absolute right-6 p-3 rounded-full bg-black/20 dark:bg-white/10 backdrop-blur-md border border-white/10 hover:bg-black/40 dark:hover:bg-white/20 transition-all"
+          aria-label="Toggle Volume"
+        >
+          {sfxVolume >= 0.8 ? <Volume2 className="w-5 h-5 text-green-400" /> : 
+           sfxVolume > 0 ? <Volume1 className="w-5 h-5 text-yellow-400" /> : 
+           <VolumeX className="w-5 h-5 text-red-500 opacity-50" />}
         </button>
       </div>
 
