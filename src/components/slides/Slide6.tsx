@@ -3,8 +3,10 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Flame, Wind, ThermometerSun } from "lucide-react";
 import { useState } from "react";
+import { useSoundEffect } from "../useSoundEffect";
 
 export default function Slide6() {
+  const { play } = useSoundEffect();
   const [hoveredNode, setHoveredNode] = useState<number | null>(null);
 
   const nodes = [
@@ -120,12 +122,16 @@ export default function Slide6() {
             key={node.id}
             className="absolute z-20 cursor-pointer"
             style={node.position}
-            onMouseEnter={() => setHoveredNode(node.id)}
+            onMouseEnter={() => {
+              setHoveredNode(node.id);
+              play("hover");
+            }}
             onMouseLeave={() => setHoveredNode(null)}
           >
             <motion.div 
               className={`w-24 h-24 md:w-32 md:h-32 rounded-full flex flex-col items-center justify-center bg-zinc-950 border-2 shadow-[0_0_30px_rgba(0,0,0,1)] relative group`}
               style={{ borderColor: node.color }}
+              onMouseEnter={() => play("hover")}
               whileHover={{ scale: 1.1 }}
               transition={{ type: "spring", stiffness: 300, damping: 15 }}
             >

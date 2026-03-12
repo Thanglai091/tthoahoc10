@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { game3Questions, Game3Question } from "../data/questions";
 import { CheckCircle, XCircle, Zap } from "lucide-react";
+import { useSoundEffect } from "../../useSoundEffect";
 
 interface Props {
   onComplete: (score: number) => void;
@@ -21,6 +22,7 @@ function shuffleArray<T>(arr: T[]): T[] {
 }
 
 export default function Game3_60Giay({ onComplete }: Props) {
+  const { play } = useSoundEffect();
   const [questions] = useState<Game3Question[]>(() => shuffleArray(game3Questions));
   const [qIdx, setQIdx] = useState(0);
   const [timeLeft, setTimeLeft] = useState(TOTAL_TIME);
@@ -54,6 +56,10 @@ export default function Game3_60Giay({ onComplete }: Props) {
     setSelected(i);
     const q = questions[qIdx];
     const isCorrect = q.options[i].correct;
+    
+    if (isCorrect) play("correct");
+    else play("wrong");
+    
     setLastResult(isCorrect ? "correct" : "wrong");
     setAnswered((a) => a + 1);
     if (isCorrect) {
@@ -188,6 +194,7 @@ export default function Game3_60Giay({ onComplete }: Props) {
                   style={style}
                   onClick={() => handleAnswer(i)}
                   disabled={selected !== null || done}
+                  onMouseEnter={() => selected === null && play("hover")}
                   whileHover={selected === null ? { scale: 1.02 } : {}}
                   whileTap={selected === null ? { scale: 0.97 } : {}}
                 >

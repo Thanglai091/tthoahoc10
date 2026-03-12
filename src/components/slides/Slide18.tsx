@@ -1,8 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useSoundEffect } from "../useSoundEffect";
 
 export default function Slide18() {
+  const { play } = useSoundEffect();
   const conditions = [
     { title: "Bụi Mịn", size: "scale-90" },
     { title: "Lơ Lửng Nồng Độ Cao", size: "scale-100" },
@@ -43,6 +45,7 @@ export default function Slide18() {
                 delay: idx * 0.2, // Sequential deal
                 type: "spring", stiffness: 60
               }}
+              onMouseEnter={() => play("hover")}
               whileHover={{ scale: 1.1, translateY: -20, rotateY: 10, transition: { duration: 0.3 } }}
               style={{ transformStyle: "preserve-3d" }}
             >

@@ -3,8 +3,10 @@
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { Activity, Beaker } from "lucide-react";
+import { useSoundEffect } from "../useSoundEffect";
 
 export default function Slide8() {
+  const { play } = useSoundEffect();
   const [exploded, setExploded] = useState(false);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -20,10 +22,11 @@ export default function Slide8() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
+      play("explosion");
       setExploded(true);
     }, 1500); // Explode after 1.5s
     return () => clearTimeout(timer);
-  }, []);
+  }, [play]);
 
   const shards = [
     { clipPath: "polygon(0 0, 60% 0, 30% 60%, 0 40%)", init: { x: -300, y: -300, rotate: -45 } },

@@ -2,8 +2,10 @@
 
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import React, { useEffect, useState } from "react";
+import { useSoundEffect } from "../useSoundEffect";
 
 export default function Slide4() {
+  const { play } = useSoundEffect();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const [ashes, setAshes] = useState<{ id: string; x: number; delay: number; duration: number; size: number }[]>([]);
@@ -130,6 +132,7 @@ export default function Slide4() {
             className="flex-1 bg-gradient-to-br from-green-950/60 to-black/80 backdrop-blur-xl border border-green-500/30 p-10 rounded-[40px] shadow-[0_30px_60px_rgba(0,0,0,0.6)] relative overflow-hidden group cursor-default"
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
+            onMouseEnter={() => play("hover")}
             whileHover={{ scale: 1.05, borderColor: "rgba(74,222,128,0.8)", boxShadow: "0 0 50px rgba(74,222,128,0.4)", y: -10 }}
             transition={{ opacity: { delay: 0.5 }, x: { delay: 0.5 }, default: { type: "spring", stiffness: 300, damping: 20 } }}
             style={{ translateZ: 50 }}
@@ -153,6 +156,7 @@ export default function Slide4() {
             className="flex-1 bg-gradient-to-br from-orange-950/60 to-black/80 backdrop-blur-xl border border-orange-500/30 p-10 rounded-[40px] shadow-[0_30px_60px_rgba(0,0,0,0.6)] relative overflow-hidden group cursor-default"
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
+            onMouseEnter={() => play("hover")}
             whileHover={{ scale: 1.05, borderColor: "rgba(249,115,22,0.8)", boxShadow: "0 0 50px rgba(249,115,22,0.4)", y: -10 }}
             transition={{ opacity: { delay: 0.7 }, x: { delay: 0.7 }, default: { type: "spring", stiffness: 300, damping: 20 } }}
             style={{ translateZ: 80 }}

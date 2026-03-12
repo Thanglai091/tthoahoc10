@@ -3,8 +3,10 @@
 import { motion, useAnimation } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 import { MousePointerClick } from "lucide-react";
+import { useSoundEffect } from "../useSoundEffect";
 
 export default function Slide17() {
+  const { play } = useSoundEffect();
   const [particles, setParticles] = useState<{ id: number; x: number; y: number; vx: number; vy: number; size: number }[]>([]);
   const [isExploded, setIsExploded] = useState(false);
   const [clickPos, setClickPos] = useState({ x: 0, y: 0 });
@@ -53,6 +55,7 @@ export default function Slide17() {
 
   const handleIgnite = (e: React.MouseEvent) => {
     if (isExploded) return;
+    play("click");
     setIsExploded(true);
     setClickPos({ x: e.clientX, y: e.clientY });
 

@@ -3,8 +3,9 @@
 import { motion } from "framer-motion";
 import { AlertTriangle } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useSoundEffect } from "../useSoundEffect";
 
-const WarningCard = ({ text, idx }: { text: string; idx: number }) => {
+const WarningCard = ({ text, idx, play }: { text: string; idx: number; play: (type: any) => void }) => {
   const [randomRotate, setRandomRotate] = useState(0);
   
   useEffect(() => {
@@ -21,11 +22,9 @@ const WarningCard = ({ text, idx }: { text: string; idx: number }) => {
         scale: 1.1, 
         backgroundColor: "#ef4444", 
         color: "#fff", 
-        rotate: (Math.random() - 0.5) * 10,
-        transition: { duration: 0.2 } 
       }}
       onHoverStart={(e) => {
-        // Play a brief pop sound if wanted
+        play("hover");
       }}
     >
       <p className="text-xl font-bold leading-relaxed">{text}</p>
@@ -38,6 +37,7 @@ const WarningCard = ({ text, idx }: { text: string; idx: number }) => {
 };
 
 export default function Slide16() {
+  const { play } = useSoundEffect();
   const balloons = Array.from({ length: 6 });
 
   return (
@@ -89,7 +89,7 @@ export default function Slide16() {
             "Gây ra vụ nổ hóa học lớn, tỏa nhiệt mạnh làm bỏng nặng diện rộng.",
             "KHUYẾN CÁO: Thay thế hoàn toàn bằng khí hiếm Helium (He) an toàn."
           ].map((text, idx) => (
-            <WarningCard key={idx} text={text} idx={idx} />
+            <WarningCard key={idx} text={text} idx={idx} play={play} />
           ))}
         </div>
 

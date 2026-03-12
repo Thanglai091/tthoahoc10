@@ -11,6 +11,7 @@ import Game3_60Giay from "./games/Game3_60Giay";
 import Game4_NhietDo from "./games/Game4_NhietDo";
 import Game5_TrueFalse from "./games/Game5_TrueFalse";
 import { X } from "lucide-react";
+import { useSoundEffect } from "../useSoundEffect";
 
 export type GameScreen =
   | "intro"
@@ -38,10 +39,11 @@ const pageTransition = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: -20 },
-  transition: { duration: 0.4, ease: "easeInOut" },
+  transition: { duration: 0.4, ease: "easeInOut" as const },
 };
 
 export default function GameOverlay({ onClose }: GameOverlayProps) {
+  const { play } = useSoundEffect();
   const [screen, setScreen] = useState<GameScreen>("intro");
   const [scores, setScores] = useState<GameScores>({});
 
@@ -126,6 +128,7 @@ export default function GameOverlay({ onClose }: GameOverlayProps) {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.3 }}
+          onMouseEnter={() => play("hover")}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
         >

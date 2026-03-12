@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { game1Questions } from "../data/questions";
 import { CheckCircle, XCircle } from "lucide-react";
+import { useSoundEffect } from "../../useSoundEffect";
 
 interface Props {
   onComplete: (score: number) => void;
@@ -14,6 +15,7 @@ const BASE_SCORE = 100;
 const TIME_BONUS = 10;
 
 export default function Game1_TamGiacLua({ onComplete }: Props) {
+  const { play } = useSoundEffect();
   const [qIdx, setQIdx] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [timeLeft, setTimeLeft] = useState(TIME_PER_QUESTION);
@@ -32,6 +34,7 @@ export default function Game1_TamGiacLua({ onComplete }: Props) {
       setTimeLeft((t) => {
         if (t <= 1) {
           clearInterval(timerRef.current!);
+          play("wrong");
           setSelected(-1);
           setTimeout(() => advance(0), 2000);
           return 0;
@@ -63,10 +66,12 @@ export default function Game1_TamGiacLua({ onComplete }: Props) {
     setSelected(idx);
     const correct = q.options[idx].correct;
     if (correct) {
+      play("correct");
       const earned = BASE_SCORE + timeLeft * TIME_BONUS;
       setScore(earned);
       setTimeout(() => advance(earned), 2500);
     } else {
+      play("wrong");
       setShake(true);
       setTimeout(() => setShake(false), 600);
       setTimeout(() => advance(0), 2500);
@@ -155,6 +160,7 @@ export default function Game1_TamGiacLua({ onComplete }: Props) {
                   key={i}
                   className="rounded-xl p-5 text-left flex items-center gap-4 cursor-pointer transition-all"
                   style={{ background: bg, border: `2px solid ${border}`, color: textColor }}
+                  onMouseEnter={() => !isAnswered && play("hover")}
                   whileHover={!isAnswered ? { scale: 1.02 } : {}}
                   whileTap={!isAnswered ? { scale: 0.98 } : {}}
                   onClick={() => handleAnswer(i)}

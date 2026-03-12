@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { game2Items, game2Categories } from "../data/questions";
 import { CheckCircle, XCircle } from "lucide-react";
+import { useSoundEffect } from "../../useSoundEffect";
 
 interface Props {
   onComplete: (score: number) => void;
@@ -12,6 +13,7 @@ interface Props {
 type CategoryKey = "vatLy" | "hoaHoc" | "bui";
 
 export default function Game2_PhanLoaiNo({ onComplete }: Props) {
+  const { play } = useSoundEffect();
   const [placements, setPlacements] = useState<Record<number, CategoryKey>>({});
   const [selected, setSelected] = useState<number | null>(null);
   const [submitted, setSubmitted] = useState(false);
@@ -22,17 +24,20 @@ export default function Game2_PhanLoaiNo({ onComplete }: Props) {
 
   const handleItemClick = (id: number) => {
     if (submitted) return;
+    play("click");
     setSelected((prev) => (prev === id ? null : id));
   };
 
   const handleCategoryClick = (cat: CategoryKey) => {
     if (submitted || selected === null) return;
+    play("click");
     setPlacements((prev) => ({ ...prev, [selected]: cat }));
     setSelected(null);
   };
 
   const handleRemove = (id: number) => {
     if (submitted) return;
+    play("click");
     setPlacements((prev) => { const n = { ...prev }; delete n[id]; return n; });
   };
 
@@ -46,6 +51,13 @@ export default function Game2_PhanLoaiNo({ onComplete }: Props) {
     });
     setFeedbackMap(feedback);
     setSubmitted(true);
+    
+    if (correct === game2Items.length) {
+      play("correct");
+    } else {
+      play("wrong");
+    }
+    
     setTimeout(() => onComplete(correct * 100), 3500);
   };
 
@@ -92,6 +104,7 @@ export default function Game2_PhanLoaiNo({ onComplete }: Props) {
                 boxShadow: isTarget ? `0 0 20px ${meta.color}40` : "none",
               }}
               onClick={() => handleCategoryClick(cat)}
+              onMouseEnter={() => isTarget && play("hover")}
               whileHover={isTarget ? { scale: 1.02 } : {}}
             >
               <h4 className="font-black text-xl text-center mb-1" style={{ color: meta.color }}>
@@ -161,6 +174,7 @@ export default function Game2_PhanLoaiNo({ onComplete }: Props) {
                   boxShadow: selected === it.id ? "0 0 16px rgba(249,115,22,0.3)" : "none",
                 }}
                 onClick={() => handleItemClick(it.id)}
+                onMouseEnter={() => play("hover")}
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.96 }}
                 layout
@@ -185,6 +199,7 @@ export default function Game2_PhanLoaiNo({ onComplete }: Props) {
             onClick={handleSubmit}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
+            onMouseEnter={() => play("hover")}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.97 }}
           >

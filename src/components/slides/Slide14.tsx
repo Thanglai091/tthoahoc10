@@ -4,12 +4,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { BlockMath } from "react-katex";
 import React, { useState } from "react";
 import { AlertTriangle, Fingerprint } from "lucide-react";
+import { useSoundEffect } from "../useSoundEffect";
 
 export default function Slide14() {
+  const { play } = useSoundEffect();
   const [detonated, setDetonated] = useState(false);
 
   const handleDetonate = () => {
     if (detonated) return;
+    play("click");
     setDetonated(true);
   };
 

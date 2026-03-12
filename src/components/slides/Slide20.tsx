@@ -5,12 +5,15 @@ import { Play, ShieldAlert } from "lucide-react";
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import GameOverlay from "@/components/game/GameOverlay";
+import { useSoundEffect } from "../useSoundEffect";
 
 export default function Slide20() {
+  const { play } = useSoundEffect();
   const [clicked, setClicked] = useState(false);
   const [showGame, setShowGame] = useState(false);
   
   const handleStart = () => {
+    play("start");
     setClicked(true);
     setTimeout(() => {
       setShowGame(true);
@@ -91,6 +94,7 @@ export default function Slide20() {
       >
         <motion.button
           className="relative group px-12 py-6 bg-red-950/80 backdrop-blur-md border border-red-500/50 rounded-full flex items-center gap-4 cursor-pointer overflow-hidden outline-none"
+          onMouseEnter={() => play("hover")}
           whileHover={{ scale: 1.05, borderColor: "rgba(239,68,68,1)" }}
           whileTap={{ scale: 0.95 }}
           onClick={handleStart}

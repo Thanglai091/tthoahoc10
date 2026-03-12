@@ -3,6 +3,7 @@
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { BlockMath } from "react-katex";
 import { useState, useEffect } from "react";
+import { useSoundEffect } from "../useSoundEffect";
 
 // Orbiting Particle Component
 const OrbitingParticle = ({ 
@@ -69,6 +70,7 @@ const OrbitingParticle = ({
 };
 
 export default function Slide15() {
+  const { play } = useSoundEffect();
   const [phase, setPhase] = useState(0); // 0: Idle, 1: Gathering, 2: Exploded
 
   useEffect(() => {
@@ -82,9 +84,9 @@ export default function Slide15() {
   }, [phase]);
 
   const handleIgnite = () => {
-    if (phase === 0) setPhase(1);
+    if (phase === 0) { play("click"); setPhase(1); }
     // Double click to reset
-    if (phase === 2) setPhase(0);
+    if (phase === 2) { play("click"); setPhase(0); }
   };
 
   // Generate a fixed set of particles

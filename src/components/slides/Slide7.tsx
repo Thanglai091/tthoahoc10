@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Zap, Flame, ThermometerSun } from "lucide-react";
+import { useSoundEffect } from "../useSoundEffect";
 
 // The flying shards from the initial "NỔ"
 const Shard = ({ index }: { index: number }) => {
@@ -38,15 +39,17 @@ const Shard = ({ index }: { index: number }) => {
 };
 
 export default function Slide7() {
+  const { play } = useSoundEffect();
   const [exploded, setExploded] = useState(false);
   const [hoveredOrb, setHoveredOrb] = useState<number | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
+      play("explosion");
       setExploded(true);
     }, 1500);
     return () => clearTimeout(timer);
-  }, []);
+  }, [play]);
 
   const shards = Array.from({ length: 40 });
 
@@ -136,8 +139,11 @@ export default function Slide7() {
                     initial={{ scale: 0, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ delay: 1 + idx * 0.2, type: "spring", stiffness: 200 }}
+                    onMouseEnter={() => {
+                      setHoveredOrb(orb.id);
+                      play("hover");
+                    }}
                     whileHover={{ scale: 1.15 }}
-                    onMouseEnter={() => setHoveredOrb(orb.id)}
                     onMouseLeave={() => setHoveredOrb(null)}
                     style={{
                       boxShadow: `0 0 40px ${orb.shadow}, inset 0 0 20px rgba(255,255,255,0.5)`

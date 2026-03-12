@@ -3,15 +3,18 @@
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import React, { useState } from "react";
 import { Maximize, Flame } from "lucide-react";
+import { useSoundEffect } from "../useSoundEffect";
 
 const HolographicCard = ({ 
   panel, 
   isHovered, 
-  onHover 
+  onHover,
+  playHover
 }: { 
   panel: any, 
   isHovered: boolean, 
-  onHover: (id: string | null) => void 
+  onHover: (id: string | null) => void,
+  playHover: () => void
 }) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -36,7 +39,10 @@ const HolographicCard = ({
       className={`relative w-full lg:w-[45%] h-[600px] perspective-[1500px] cursor-crosshair transition-all duration-700 ease-out`}
       style={{ zIndex: isHovered ? 20 : 10 }}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => onHover(panel.id)}
+      onMouseEnter={() => {
+        onHover(panel.id);
+        playHover();
+      }}
       onMouseLeave={handleMouseLeave}
       animate={{ 
         scale: isHovered ? 1.05 : 0.95,
@@ -104,6 +110,7 @@ const HolographicCard = ({
 };
 
 export default function Slide9() {
+  const { play } = useSoundEffect();
   const [hoveredPanel, setHoveredPanel] = useState<string | null>(null);
 
   const panels = [
@@ -153,6 +160,7 @@ export default function Slide9() {
             panel={panel} 
             isHovered={hoveredPanel === panel.id || hoveredPanel === null} // Default to both semi-focused if none hovered
             onHover={setHoveredPanel} 
+            playHover={() => play("hover")}
           />
         ))}
       </div>

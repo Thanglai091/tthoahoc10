@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { GameScores } from "./GameOverlay";
 import { Star, Play, Trophy } from "lucide-react";
+import { useSoundEffect } from "../useSoundEffect";
 
 interface GameMenuProps {
   scores: GameScores;
@@ -18,6 +19,7 @@ const GAMES = [
 ];
 
 export default function GameMenu({ scores, onSelectGame }: GameMenuProps) {
+  const { play } = useSoundEffect();
   const totalMax = GAMES.reduce((a, g) => a + g.maxScore, 0);
   const totalScore = Object.values(scores).reduce((a, s) => a + s, 0);
   const completedCount = Object.keys(scores).length;
@@ -46,12 +48,12 @@ export default function GameMenu({ scores, onSelectGame }: GameMenuProps) {
       <div className="w-full max-w-7xl">
         <div className="grid grid-cols-3 gap-5 mb-5">
           {GAMES.slice(0, 3).map((game, idx) => (
-            <GameCard key={game.id} game={game} score={scores[game.id]} onPlay={() => onSelectGame(game.id)} delay={idx * 0.08} />
+            <GameCard key={game.id} game={game} score={scores[game.id]} onPlay={() => { play("click"); onSelectGame(game.id); }} delay={idx * 0.08} />
           ))}
         </div>
         <div className="grid grid-cols-2 gap-5 max-w-4xl mx-auto">
           {GAMES.slice(3).map((game, idx) => (
-            <GameCard key={game.id} game={game} score={scores[game.id]} onPlay={() => onSelectGame(game.id)} delay={(idx + 3) * 0.08} />
+            <GameCard key={game.id} game={game} score={scores[game.id]} onPlay={() => { play("click"); onSelectGame(game.id); }} delay={(idx + 3) * 0.08} />
           ))}
         </div>
       </div>
@@ -60,6 +62,7 @@ export default function GameMenu({ scores, onSelectGame }: GameMenuProps) {
 }
 
 function GameCard({ game, score, onPlay, delay }: { game: typeof GAMES[0]; score?: number; onPlay: () => void; delay: number }) {
+  const { play } = useSoundEffect();
   const played = score !== undefined;
   const pct = played ? Math.round((score / game.maxScore) * 100) : 0;
 
@@ -71,6 +74,7 @@ function GameCard({ game, score, onPlay, delay }: { game: typeof GAMES[0]; score
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.4 }}
       whileHover={{ scale: 1.03, borderColor: game.color + "90" }}
+      onMouseEnter={() => play("hover")}
       onClick={onPlay}
     >
       {/* Hover glow */}
@@ -126,6 +130,7 @@ function GameCard({ game, score, onPlay, delay }: { game: typeof GAMES[0]; score
             className="flex items-center gap-2 px-6 py-3 rounded-full text-base font-black text-white"
             style={{ background: game.color + "40", border: `2px solid ${game.color}65` }}
             whileHover={{ background: game.color + "70" }}
+            onMouseEnter={() => play("hover")}
             onClick={onPlay}
           >
             <Play className="w-5 h-5 fill-white" />

@@ -2,14 +2,19 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useSoundEffect } from "../useSoundEffect";
 
 export default function Slide13() {
+  const { play } = useSoundEffect();
   const [step, setStep] = useState(0);
 
   useEffect(() => {
     // Sequence control
     const t1 = setTimeout(() => setStep(1), 500); // Start collision
-    const t2 = setTimeout(() => setStep(2), 2000); // Boom! Flash & swap to full equation
+    const t2 = setTimeout(() => {
+      play("explosion");
+      setStep(2);
+    }, 2000); // Boom! Flash & swap to full equation
     const t3 = setTimeout(() => setStep(3), 3500); // Show Enthalpy
 
     return () => {
@@ -17,7 +22,7 @@ export default function Slide13() {
       clearTimeout(t2);
       clearTimeout(t3);
     };
-  }, []);
+  }, [play]);
 
   return (
     <div className="relative w-full h-[100vh] flex flex-col items-center justify-center bg-[#050B14] overflow-hidden font-sans">

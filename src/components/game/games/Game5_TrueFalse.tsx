@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { game5Questions } from "../data/questions";
 import { CheckCircle, XCircle } from "lucide-react";
+import { useSoundEffect } from "../../useSoundEffect";
 
 interface Props {
   onComplete: (score: number) => void;
@@ -12,6 +13,7 @@ interface Props {
 const TIME_PER_QUESTION = 10;
 
 export default function Game5_TrueFalse({ onComplete }: Props) {
+  const { play } = useSoundEffect();
   const [qIdx, setQIdx] = useState(0);
   const [timeLeft, setTimeLeft] = useState(TIME_PER_QUESTION);
   const [score, setScore] = useState(0);
@@ -43,6 +45,7 @@ export default function Game5_TrueFalse({ onComplete }: Props) {
   useEffect(() => {
     if (timeLeft === 0 && answered === null && !done) {
       clearInterval(timerRef.current!);
+      play("wrong");
       setAnswered("timeout");
       setStreak(0);
       setFeedbackMsg("⏰ Hết giờ!");
@@ -55,6 +58,10 @@ export default function Game5_TrueFalse({ onComplete }: Props) {
     if (answered !== null || done) return;
     clearInterval(timerRef.current!);
     const correct = answer === q.isTrue;
+    
+    if (correct) play("correct");
+    else play("wrong");
+    
     const newStreak = correct ? streak + 1 : 0;
     setStreak(newStreak);
     const bonus = newStreak >= 3 ? Math.min((newStreak - 2) * 20, 60) : 0;
@@ -192,6 +199,7 @@ export default function Game5_TrueFalse({ onComplete }: Props) {
             }}
             onClick={() => handleAnswer(true)}
             disabled={answered !== null}
+            onMouseEnter={() => answered === null && play("hover")}
             whileHover={answered === null ? { scale: 1.03, background: "rgba(34,197,94,0.2)" } : {}}
             whileTap={answered === null ? { scale: 0.97 } : {}}
           >
@@ -208,6 +216,7 @@ export default function Game5_TrueFalse({ onComplete }: Props) {
             }}
             onClick={() => handleAnswer(false)}
             disabled={answered !== null}
+            onMouseEnter={() => answered === null && play("hover")}
             whileHover={answered === null ? { scale: 1.03, background: "rgba(239,68,68,0.2)" } : {}}
             whileTap={answered === null ? { scale: 0.97 } : {}}
           >

@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 import { Trophy, RotateCcw, Home, Star } from "lucide-react";
+import { useEffect } from "react";
+import { useSoundEffect } from "../useSoundEffect";
 
 interface GameResultProps {
   gameId: number;
@@ -61,6 +63,9 @@ export default function GameResult({
   onPlayAgain,
   onBackToMenu,
 }: GameResultProps) {
+  const { play } = useSoundEffect();
+  useEffect(() => { play("success"); }, [play]);
+
   const meta = GAME_META[gameId] ?? GAME_META[1];
   const pct = Math.min(100, Math.round((score / meta.maxScore) * 100));
   const rank = getRank(pct);
@@ -212,7 +217,8 @@ export default function GameResult({
         >
           <motion.button
             className="flex-1 flex items-center justify-center gap-2 py-4 rounded-full border border-white/10 text-white/60 hover:text-white hover:border-white/30 hover:bg-white/5 transition-all font-bold text-base"
-            onClick={onBackToMenu}
+            onClick={() => { play("click"); onBackToMenu(); }}
+            onMouseEnter={() => play("hover")}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
           >
@@ -226,7 +232,8 @@ export default function GameResult({
               background: `linear-gradient(135deg, ${meta.color}cc, ${rank.color}cc)`,
               boxShadow: `0 0 20px ${rank.glow}`,
             }}
-            onClick={onPlayAgain}
+            onClick={() => { play("click"); onPlayAgain(); }}
+            onMouseEnter={() => play("hover")}
             whileHover={{ scale: 1.04, boxShadow: `0 0 35px ${rank.glow}` }}
             whileTap={{ scale: 0.97 }}
           >

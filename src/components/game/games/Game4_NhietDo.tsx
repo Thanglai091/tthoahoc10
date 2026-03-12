@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { game4Items, TempItem } from "../data/questions";
 import { CheckCircle, XCircle } from "lucide-react";
+import { useSoundEffect } from "../../useSoundEffect";
 
 interface Props {
   onComplete: (score: number) => void;
@@ -23,6 +24,7 @@ const CORRECT_ORDER = [...game4Items]
   .map((i) => i.id);
 
 export default function Game4_NhietDo({ onComplete }: Props) {
+  const { play } = useSoundEffect();
   const [items] = useState<TempItem[]>(() => shuffle(game4Items));
   const [order, setOrder] = useState<number[]>([]); // ids in click order
   const [submitted, setSubmitted] = useState(false);
@@ -31,6 +33,7 @@ export default function Game4_NhietDo({ onComplete }: Props) {
 
   const toggleItem = (id: number) => {
     if (submitted) return;
+    play("click");
     setOrder((prev) => {
       if (prev.includes(id)) {
         // deselect: remove this and everything after
@@ -47,6 +50,10 @@ export default function Game4_NhietDo({ onComplete }: Props) {
     setResults(res);
     setSubmitted(true);
     const correctCount = res.filter(Boolean).length;
+    
+    if (correctCount === 4) play("correct");
+    else play("wrong");
+    
     let score = correctCount * 250;
     if (correctCount === 4) score += 200;
     if (attempt > 1) score = Math.floor(score * 0.6);
@@ -54,6 +61,7 @@ export default function Game4_NhietDo({ onComplete }: Props) {
   };
 
   const handleReset = () => {
+    play("click");
     setOrder([]);
     setSubmitted(false);
     setResults([]);
@@ -182,6 +190,7 @@ export default function Game4_NhietDo({ onComplete }: Props) {
               key={it.id}
               onClick={() => toggleItem(it.id)}
               disabled={submitted}
+              onMouseEnter={() => !submitted && play("hover")}
               whileHover={!submitted ? { y: -6, scale: 1.03 } : {}}
               whileTap={!submitted ? { scale: 0.96 } : {}}
               style={{
@@ -291,6 +300,7 @@ export default function Game4_NhietDo({ onComplete }: Props) {
             onClick={handleSubmit}
             initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
+            onMouseEnter={() => play("hover")}
             whileHover={{ scale: 1.06, boxShadow: "0 0 40px rgba(34,197,94,0.5)" }}
             whileTap={{ scale: 0.96 }}
             style={{

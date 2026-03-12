@@ -3,8 +3,10 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Target, RotateCcw } from "lucide-react";
+import { useSoundEffect } from "../useSoundEffect";
 
 export default function Slide1() {
+  const { play } = useSoundEffect();
   const [isFlipped, setIsFlipped] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [embers, setEmbers] = useState<{ id: string; x: number; y: number; size: number; delay: number; duration: number; opacity: number }[]>([]);
@@ -227,9 +229,10 @@ export default function Slide1() {
             {/* Flip Button to go to Objectives */}
             <motion.button 
               className="mt-12 flex items-center gap-2 px-6 py-3 bg-red-950/40 border border-red-500/50 rounded-full text-red-300 hover:text-white hover:bg-red-600/50 hover:border-red-400 transition-all font-mono tracking-widest text-sm uppercase backdrop-blur-sm group pointer-events-auto shadow-[0_0_20px_rgba(220,38,38,0.3)]"
+              onMouseEnter={() => play("hover")}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => setIsFlipped(true)}
+              onClick={() => { play("click"); setIsFlipped(true); }}
             >
               <Target className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" /> MỤC TIÊU BÀI HỌC
             </motion.button>
@@ -284,7 +287,7 @@ export default function Slide1() {
               <div className="mt-10 flex justify-end">
                 <button 
                   className="flex items-center gap-2 text-orange-400 hover:text-white transition-colors uppercase font-mono tracking-widest text-sm"
-                  onClick={() => setIsFlipped(false)}
+                  onClick={() => { play("click"); setIsFlipped(false); }}
                 >
                   <RotateCcw className="w-4 h-4" /> TRỞ VỀ KHUNG HÌNH CHÍNH
                 </button>

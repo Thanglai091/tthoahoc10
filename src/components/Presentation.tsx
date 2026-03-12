@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { ChevronRight, ChevronLeft } from "lucide-react";
+import { useSoundEffect } from "./useSoundEffect";
 
 // Thay the import that we will build later
 // import Slide1 from "./slides/Slide1";
@@ -12,14 +13,23 @@ const TOTAL_SLIDES = 20;
 
 export function Presentation({ children, slides }: { children?: React.ReactNode, slides: React.FC[] }) {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const { play } = useSoundEffect();
 
   const nextSlide = useCallback(() => {
-    setCurrentSlide((prev) => Math.min(prev + 1, TOTAL_SLIDES - 1));
-  }, []);
+    setCurrentSlide((prev) => {
+      const nextIdx = Math.min(prev + 1, TOTAL_SLIDES - 1);
+      if (nextIdx !== prev) play("slide");
+      return nextIdx;
+    });
+  }, [play]);
 
   const prevSlide = useCallback(() => {
-    setCurrentSlide((prev) => Math.max(prev - 1, 0));
-  }, []);
+    setCurrentSlide((prev) => {
+      const prevIdx = Math.max(prev - 1, 0);
+      if (prevIdx !== prev) play("slide");
+      return prevIdx;
+    });
+  }, [play]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

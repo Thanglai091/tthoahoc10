@@ -3,12 +3,14 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Flame, ShieldCheck } from "lucide-react";
+import { useSoundEffect } from "../useSoundEffect";
 
 interface GameIntroProps {
   onStart: () => void;
 }
 
 export default function GameIntro({ onStart }: GameIntroProps) {
+  const { play } = useSoundEffect();
   const [embers, setEmbers] = useState<
     { id: number; x: number; size: number; delay: number; dur: number }[]
   >([]);
@@ -166,7 +168,7 @@ export default function GameIntro({ onStart }: GameIntroProps) {
               "linear-gradient(135deg, rgba(239,68,68,0.9), rgba(249,115,22,0.9))",
             boxShadow: "0 0 30px rgba(239,68,68,0.4)",
           }}
-          onClick={onStart}
+          onClick={() => { play("start"); onStart(); }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.3 }}
@@ -174,6 +176,7 @@ export default function GameIntro({ onStart }: GameIntroProps) {
             scale: 1.05,
             boxShadow: "0 0 50px rgba(239,68,68,0.6)",
           }}
+          onMouseEnter={() => play("hover")}
           whileTap={{ scale: 0.97 }}
         >
           <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors duration-300" />
