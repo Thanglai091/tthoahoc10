@@ -56,7 +56,7 @@ export default function Game1_TamGiacLua({ onComplete }: Props) {
     });
     setSelected(null);
     setTimeLeft(TIME_PER_QUESTION);
-    setScore(addScore);
+    setScore(0);
     if (qIdx < game1Questions.length - 1) setQIdx((i) => i + 1);
   };
 
@@ -72,6 +72,7 @@ export default function Game1_TamGiacLua({ onComplete }: Props) {
       setTimeout(() => advance(earned), 2500);
     } else {
       play("wrong");
+      setScore(0);
       setShake(true);
       setTimeout(() => setShake(false), 600);
       setTimeout(() => advance(0), 2500);

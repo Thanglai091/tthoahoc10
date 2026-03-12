@@ -13,7 +13,7 @@ export default function Slide20() {
   const [showGame, setShowGame] = useState(false);
   
   const handleStart = () => {
-    play("start");
+    play("scan");
     setClicked(true);
     setTimeout(() => {
       setShowGame(true);
@@ -93,24 +93,39 @@ export default function Slide20() {
         transition={{ delay: 1, duration: 1, type: "spring", bounce: 0.5 }}
       >
         <motion.button
-          className="relative group px-12 py-6 bg-red-950/80 backdrop-blur-md border border-red-500/50 rounded-full flex items-center gap-4 cursor-pointer overflow-hidden outline-none"
+          className="relative group px-10 py-5 bg-black/60 backdrop-blur-md border border-red-500/40 flex items-center gap-6 cursor-pointer overflow-hidden outline-none"
           onMouseEnter={() => play("hover")}
-          whileHover={{ scale: 1.05, borderColor: "rgba(239,68,68,1)" }}
+          whileHover={{ scale: 1.05, borderColor: "rgba(239,68,68,1)", boxShadow: "0 0 30px rgba(239,68,68,0.4)" }}
           whileTap={{ scale: 0.95 }}
           onClick={handleStart}
         >
-          {/* Button Glow / Radar sweep */}
-          <div className="absolute inset-0 bg-red-600/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 blur-xl" />
+          {/* Tech overlay patterns */}
+          <div className="absolute inset-0 opacity-10 bg-[linear-gradient(90deg,transparent_50%,rgba(255,255,255,0.2)_50%)] bg-[length:4px_100%] pointer-events-none" />
           
-          <Play className="w-8 h-8 text-red-500 fill-red-500 group-hover:text-white group-hover:fill-white transition-colors" />
-          <span className="text-2xl font-bold text-red-100 group-hover:text-white tracking-widest uppercase transition-colors">
-            Khóa Huấn Luyện Thực Tế
-          </span>
+          {/* Corner brackets */}
+          <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-red-500 transition-all group-hover:w-6 group-hover:h-6" />
+          <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-red-500 transition-all group-hover:w-6 group-hover:h-6" />
+          <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-red-500 transition-all group-hover:w-6 group-hover:h-6" />
+          <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-red-500 transition-all group-hover:w-6 group-hover:h-6" />
 
-          {/* Magnetic edge glowing particles */}
+          {/* Glitch / scanline effect */}
           <motion.div 
-            className="absolute inset-0 rounded-full border border-red-400/0 group-hover:border-red-400/100 shadow-[0_0_0px_rgba(239,68,68,0)] group-hover:shadow-[0_0_40px_rgba(239,68,68,0.8)] transition-all duration-300 pointer-events-none"
+            className="absolute top-0 left-0 w-full h-[2px] bg-red-500/50 mix-blend-screen pointer-events-none"
+            animate={{ top: ["0%", "100%", "0%"] }}
+            transition={{ duration: 2, ease: "linear", repeat: Infinity }}
           />
+
+          {/* Radar Sweep */}
+          <div className="absolute inset-0 bg-red-600/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 blur-xl pointer-events-none" />
+          
+          <Play className="w-8 h-8 text-red-500 fill-red-500 group-hover:animate-pulse relative z-10" />
+          
+          <div className="flex flex-col items-start relative z-10 opacity-90 group-hover:opacity-100 transition-opacity">
+            <span className="text-xs text-red-500/70 font-mono tracking-widest uppercase mb-1">SYSTEM.INIT()</span>
+            <span className="text-2xl font-bold text-white tracking-[0.15em] uppercase font-mono drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] group-hover:text-red-100 transition-colors">
+              Khóa Huấn Luyện Thực Tế
+            </span>
+          </div>
         </motion.button>
       </motion.div>
 

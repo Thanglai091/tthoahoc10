@@ -161,7 +161,7 @@ export default function GameOverlay({ onClose }: GameOverlayProps) {
       )}
 
       {/* Audio Controls */}
-      <div className="absolute top-5 left-5 z-[1001] flex flex-col gap-3">
+      <div className="absolute top-5 left-5 z-[1001] flex flex-col items-start gap-3">
         {/* SFX Slider */}
         <div className="flex items-center bg-black/40 backdrop-blur-md border border-white/10 rounded-full p-2 h-12 shadow-lg hover:bg-black/60 transition-colors group cursor-pointer">
           <motion.button
