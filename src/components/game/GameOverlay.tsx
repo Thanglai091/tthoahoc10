@@ -163,9 +163,9 @@ export default function GameOverlay({ onClose }: GameOverlayProps) {
       {/* Audio Controls */}
       <div className="absolute top-5 left-5 z-[1001] flex flex-col gap-3">
         {/* SFX Slider */}
-        <div className="flex items-center gap-3 bg-black/40 backdrop-blur-md border border-white/10 rounded-full p-2 px-4 shadow-lg hover:bg-black/60 transition-colors">
+        <div className="flex items-center bg-black/40 backdrop-blur-md border border-white/10 rounded-full p-2 h-12 shadow-lg hover:bg-black/60 transition-colors group cursor-pointer">
           <motion.button
-            className="flex items-center justify-center text-white/80 hover:text-white transition-all outline-none"
+            className="flex items-center justify-center w-8 h-8 text-white/80 hover:text-white transition-all outline-none flex-shrink-0"
             onClick={toggleSfx}
             onMouseEnter={() => play("hover")}
             whileHover={{ scale: 1.1 }}
@@ -177,19 +177,21 @@ export default function GameOverlay({ onClose }: GameOverlayProps) {
              <VolumeX size={18} className="text-red-500 opacity-50" />}
           </motion.button>
           
-          <input 
-            type="range" min="0" max="15" step="1" value={sfxVolume}
-            onChange={(e) => setSfxVolume(parseInt(e.target.value))}
-            onMouseUp={() => play("click")}
-            title="Âm lượng hiệu ứng"
-            className="w-24 h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer accent-blue-500"
-          />
+          <div className="w-0 overflow-hidden group-hover:w-28 transition-[width] duration-300 ease-in-out flex items-center">
+            <input 
+              type="range" min="0" max="15" step="1" value={sfxVolume}
+              onChange={(e) => setSfxVolume(parseInt(e.target.value))}
+              onMouseUp={() => play("click")}
+              title="Âm lượng hiệu ứng"
+              className="w-24 ml-2 max-w-full h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer accent-blue-500"
+            />
+          </div>
         </div>
 
         {/* BGM Slider */}
-        <div className="flex items-center gap-3 bg-black/40 backdrop-blur-md border border-white/10 rounded-full p-2 px-4 shadow-lg hover:bg-black/60 transition-colors">
+        <div className="flex items-center bg-black/40 backdrop-blur-md border border-white/10 rounded-full p-2 h-12 shadow-lg hover:bg-black/60 transition-colors group cursor-pointer">
           <motion.button
-            className="flex items-center justify-center text-white/80 hover:text-white transition-all outline-none"
+            className="flex items-center justify-center w-8 h-8 text-white/80 hover:text-white transition-all outline-none flex-shrink-0"
             onClick={toggleBgm}
             onMouseEnter={() => play("hover")}
             whileHover={{ scale: 1.1 }}
@@ -201,12 +203,14 @@ export default function GameOverlay({ onClose }: GameOverlayProps) {
              <Music size={18} className="text-red-500 opacity-50" />}
           </motion.button>
           
-          <input 
-            type="range" min="0" max="15" step="1" value={bgmVolume}
-            onChange={(e) => setBgmVolume(parseInt(e.target.value))}
-            title="Âm lượng nhạc nền"
-            className="w-24 h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer accent-purple-500"
-          />
+          <div className="w-0 overflow-hidden group-hover:w-28 transition-[width] duration-300 ease-in-out flex items-center">
+            <input 
+              type="range" min="0" max="15" step="1" value={bgmVolume}
+              onChange={(e) => setBgmVolume(parseInt(e.target.value))}
+              title="Âm lượng nhạc nền"
+              className="w-24 ml-2 max-w-full h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer accent-purple-500"
+            />
+          </div>
         </div>
       </div>
 

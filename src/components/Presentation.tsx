@@ -88,10 +88,10 @@ export function Presentation({ children, slides }: { children?: React.ReactNode,
         </button>
 
         {/* Global Slide SFX Volume Toggle with Slider */}
-        <div className="absolute right-6 flex items-center gap-3 bg-black/20 dark:bg-white/10 backdrop-blur-md border border-white/10 rounded-full p-2 px-4 transition-all hover:bg-black/40 dark:hover:bg-white/20">
+        <div className="absolute right-6 flex items-center bg-black/20 dark:bg-white/10 backdrop-blur-md border border-white/10 rounded-full p-2 h-12 transition-all hover:bg-black/40 dark:hover:bg-white/20 group cursor-pointer">
           <button
             onClick={handleVolumeToggle}
-            className="text-white/80 hover:text-white transition-all outline-none"
+            className="flex items-center justify-center w-8 h-8 text-white/80 hover:text-white transition-all outline-none flex-shrink-0"
             aria-label="Toggle Volume"
             title="Điều chỉnh SFX Slider"
           >
@@ -100,16 +100,18 @@ export function Presentation({ children, slides }: { children?: React.ReactNode,
              <VolumeX className="w-5 h-5 text-red-500 opacity-50" />}
           </button>
           
-          <input 
-            type="range" 
-            min="0" 
-            max="15" 
-            step="1"
-            value={sfxVolume}
-            onChange={(e) => setSfxVolume(parseInt(e.target.value))}
-            onMouseUp={() => play("click")}
-            className="w-24 h-1 bg-white/30 rounded-lg appearance-none cursor-pointer accent-orange-500"
-          />
+          <div className="w-0 overflow-hidden group-hover:w-28 transition-[width] duration-300 ease-in-out flex items-center">
+            <input 
+              type="range" 
+              min="0" 
+              max="15" 
+              step="1"
+              value={sfxVolume}
+              onChange={(e) => setSfxVolume(parseInt(e.target.value))}
+              onMouseUp={() => play("click")}
+              className="w-24 ml-2 max-w-full h-1.5 bg-white/30 rounded-lg appearance-none cursor-pointer accent-orange-500"
+            />
+          </div>
         </div>
       </div>
 

@@ -87,7 +87,7 @@ export default function Slide4() {
            }}
            transition={{
              y: { duration: ash.duration, repeat: Infinity, delay: ash.delay, ease: "linear" },
-             x: { duration: ash.duration, repeat: Infinity, delay: ash.delay, ease: "easeInOut", yoyo: Infinity },
+             x: { duration: ash.duration, repeat: Infinity, delay: ash.delay, ease: "easeInOut", repeatType: "mirror" },
              rotate: { duration: ash.duration / 2, repeat: Infinity, ease: "linear" }
            }}
         />
