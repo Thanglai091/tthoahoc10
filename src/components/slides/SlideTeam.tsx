@@ -1,346 +1,277 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
 const MEMBERS = [
-  { name: "Quốc Anh",   emoji: "🦁" },
+  { name: "Quốc Anh", emoji: "🦁" },
   { name: "Trần Thịnh", emoji: "⚡" },
-  { name: "Anh Thư",    emoji: "🌸" },
-  { name: "Tú Uyên",    emoji: "🦋" },
-  { name: "Bảo Trâm",   emoji: "🌺" },
+  { name: "Anh Thư", emoji: "🌸" },
+  { name: "Tú Uyên", emoji: "🦋" },
+  { name: "Bảo Trâm", emoji: "🌺" },
   { name: "Thùy Dương", emoji: "🌊" },
   { name: "Thùy Trinh", emoji: "🌙" },
-  { name: "Hà Linh",    emoji: "🌟" },
-  { name: "Khởi My",    emoji: "🎵" },
-  { name: "Kim Ngân",   emoji: "💎" },
-  { name: "Minh Tâm",   emoji: "🔮" },
+  { name: "Hà Linh", emoji: "🌟" },
+  { name: "Khởi My", emoji: "🎵" },
+  { name: "Kim Ngân", emoji: "💎" },
+  { name: "Minh Tâm", emoji: "🔮" },
   { name: "Thiện Nhân", emoji: "🛡️" },
   { name: "Thanh Thùy", emoji: "🎯" },
 ];
 
-// Re-organize members since Star is Minh Toàn. There are 13 members in MEMBERS.
-// To make it symmetric (6 left, 6 right), we'll assume one member needs to be removed from the regular list,
-// or we make it 7 and 6. For optimal symmetry, let's just split the 13 members.
-// Wait, actually there are 13 members + 1 Star.
-// Left Side: 6 or 7.
-// Let's do 6 left, 7 right or just split evenly.
-const leftMembers = MEMBERS.slice(0, 6);
-const rightMembers = MEMBERS.slice(6, 13); // 7 members on the right
-
-const STAR = {
+const LEAD = {
   name: "Minh Toàn",
   emoji: "👑",
   tags: ["Làm Dự Án", "Thuyết Trình"],
 };
 
-// ─── Sub-components ────────────────────────────────────────────────────────────
+const INNER_RING = MEMBERS.slice(0, 6);
+const OUTER_RING = MEMBERS.slice(6);
 
-function Starfield() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    
-    let w = canvas.width = window.innerWidth;
-    let h = canvas.height = window.innerHeight;
-    
-    const particles = Array.from({ length: 150 }).map(() => ({
-      x: Math.random() * w,
-      y: Math.random() * h,
-      r: Math.random() * 2 + 0.3,
-      dy: -Math.random() * 0.4 - 0.1,
-      alpha: Math.random() * 0.5 + 0.1,
-      pulse: Math.random() * 0.02 + 0.005,
-      maxAlpha: Math.random() * 0.5 + 0.3
-    }));
+const TIMING = {
+  titleDuration: 3.2,
+  leadDelay: 2.2,
+  memberDelay: 3.4,
+  orbitDelay: 5.0,
+};
 
-    let animationId: number;
-    
-    function draw() {
-      ctx!.clearRect(0, 0, w, h);
-      particles.forEach(p => {
-        p.y += p.dy;
-        if (p.y < -10) p.y = h + 10;
-        
-        p.alpha += p.pulse;
-        if (p.alpha > p.maxAlpha || p.alpha < 0.1) p.pulse *= -1;
-        
-        ctx!.beginPath();
-        ctx!.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx!.fillStyle = `rgba(255,255,255,${Math.max(0, p.alpha)})`;
-        ctx!.fill();
-      });
-      animationId = requestAnimationFrame(draw);
-    }
-    
-    draw();
-    
-    const handleResize = () => {
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
-    };
-    window.addEventListener("resize", handleResize);
-    
-    return () => {
-      cancelAnimationFrame(animationId);
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-  
-  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none opacity-50 z-0" />;
+const INNER_RADIUS = 240;
+const OUTER_RADIUS = 380;
+
+function polar(angleDeg: number, radius: number) {
+  const rad = (Math.PI / 180) * angleDeg;
+  return {
+    x: Math.cos(rad) * radius,
+    y: Math.sin(rad) * radius,
+  };
 }
 
-function AmbientOrbs() {
+function CinematicBackdrop() {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+    <div className="absolute inset-0">
+      <div className="absolute inset-0" style={{ backgroundColor: "#05070f" }} />
       <motion.div
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3],
-          x: [0, 50, 0],
-          y: [0, -50, 0],
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(circle at 15% 20%, rgba(34,211,238,0.2), transparent 45%), radial-gradient(circle at 80% 25%, rgba(251,191,36,0.2), transparent 40%), radial-gradient(circle at 60% 85%, rgba(16,185,129,0.2), transparent 45%)",
         }}
+        animate={{ opacity: [0.6, 1, 0.8] }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-purple-600/30 blur-[120px]"
       />
       <motion.div
-        animate={{
-          scale: [1, 1.5, 1],
-          opacity: [0.2, 0.4, 0.2],
-          x: [0, -50, 0],
-          y: [0, 50, 0],
+        className="absolute inset-0"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)",
+          backgroundSize: "140px 140px",
         }}
-        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-blue-600/20 blur-[150px]"
+        animate={{ backgroundPosition: ["0px 0px", "140px 140px"] }}
+        transition={{ duration: 16, repeat: Infinity, ease: "linear" }}
       />
       <motion.div
-        animate={{
-          scale: [1, 1.3, 1],
-          opacity: [0.1, 0.3, 0.1],
+        className="absolute inset-[-40%]"
+        style={{
+          background:
+            "linear-gradient(120deg, transparent 30%, rgba(56,189,248,0.2) 50%, transparent 70%)",
         }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        className="absolute top-[40%] left-[40%] w-[400px] h-[400px] rounded-full bg-amber-500/10 blur-[100px]"
+        animate={{ x: ["-10%", "10%", "-10%"], rotate: [8, 12, 8] }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
       />
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 120% 110% at 50% 45%, rgba(255,255,255,0.08), rgba(5,7,16,0.4) 55%, #02030a 100%)",
+        }}
+      />
+      <div className="absolute top-6 left-6 h-24 w-24 rounded-full bg-cyan-300/20 blur-[80px]" />
+      <div className="absolute bottom-8 right-8 h-28 w-28 rounded-full bg-amber-300/20 blur-[90px]" />
     </div>
   );
 }
 
-function StarCard() {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const mouseXSpring = useSpring(x, { stiffness: 150, damping: 15 });
-  const mouseYSpring = useSpring(y, { stiffness: 150, damping: 15 });
-
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], [15, -15]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], [-15, 15]);
-  const glowX = useTransform(mouseXSpring, [-0.5, 0.5], ["0%", "100%"]);
-  const glowY = useTransform(mouseYSpring, [-0.5, 0.5], ["0%", "100%"]);
-
-  function handleMouseMove(event: React.MouseEvent<HTMLDivElement>) {
-    const rect = event.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
-    
-    x.set((mouseX / width) - 0.5);
-    y.set((mouseY / height) - 0.5);
-  }
-
-  function handleMouseLeave() {
-    x.set(0);
-    y.set(0);
-  }
-
+function TitleSequence() {
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.5, rotateY: -90, z: -200 }}
-      animate={{ opacity: 1, scale: 1, rotateY: 0, z: 0 }}
-      transition={{ type: "spring", damping: 18, stiffness: 80, delay: 0.8 }}
-      className="relative z-20 cursor-pointer"
-      style={{ perspective: 1000 }}
-    >
-      <motion.div
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        className="relative flex flex-col items-center justify-center pt-8 pb-7 px-8 rounded-[2.5rem] w-[260px] md:w-[320px] shadow-2xl"
-      >
-        {/* Animated Border */}
-        <motion.div
-          animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-          className="absolute inset-0 rounded-[2.5rem]"
-          style={{
-            background: "linear-gradient(270deg, #fbbf24, #f97316, #ef4444, #a855f7, #3b82f6, #fbbf24)",
-            backgroundSize: "400% 400%",
-          }}
-        />
-        
-        {/* Inner Card */}
-        <div className="absolute inset-[3px] rounded-[calc(2.5rem-3px)] bg-gradient-to-b from-[#11051f] to-[#04000b] backdrop-blur-3xl" />
-        
-        {/* Interactive Inner Glow */}
-        <motion.div 
-            className="absolute inset-[3px] rounded-[calc(2.5rem-3px)] opacity-0 hover:opacity-100 transition-opacity duration-500 pointer-events-none mix-blend-screen"
-            style={{
-                background: useTransform(
-                    [glowX, glowY],
-                    ([gx, gy]: any) => `radial-gradient(circle at ${gx} ${gy}, rgba(251,191,36,0.3) 0%, transparent 60%)`
-                ) as any
-            }}
-        />
-
-        <div className="relative flex flex-col items-center gap-2 w-full z-10" style={{ transform: "translateZ(50px)" }}>
-           <motion.div 
-             animate={{ y: [0, -10, 0] }}
-             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-             className="text-[4rem] md:text-[5.5rem] drop-shadow-[0_0_25px_rgba(251,191,36,0.5)]"
-           >
-             {STAR.emoji}
-           </motion.div>
-           <div className="font-black text-[28px] md:text-[38px] text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-yellow-400 to-amber-500 drop-shadow-md text-center mt-2 leading-tight">
-             {STAR.name}
-           </div>
-           <div className="flex flex-col xl:flex-row items-center justify-center gap-2 xl:gap-3 w-full mt-3">
-             {STAR.tags.map((tag, i) => (
-               <span 
-                 key={tag} 
-                 className="text-[10px] md:text-[12px] px-3 py-1.5 rounded-full border tracking-widest uppercase font-extrabold whitespace-nowrap"
-                 style={{
-                   borderColor: i === 0 ? "rgba(251,191,36, 0.4)" : "rgba(168,85,247, 0.4)",
-                   color: i === 0 ? "#fef3c7" : "#f3e8ff",
-                   backgroundColor: i === 0 ? "rgba(251,191,36, 0.15)" : "rgba(168,85,247, 0.15)",
-                   boxShadow: i === 0 ? "0 0 12px rgba(251,191,36,0.2)" : "0 0 12px rgba(168,85,247,0.2)"
-                 }}
-               >
-                 {i === 0 ? "✦ " : "⚡ "}{tag}
-               </span>
-             ))}
-           </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
-
-function MemberCard({ member, index }: { member: any; index: number }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.5, y: 50 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{ delay: 1.1 + index * 0.05, type: "spring", stiffness: 200, damping: 18 }}
-      whileHover={{ scale: 1.12, y: -12, zIndex: 30 }}
-      className="relative flex flex-col items-center justify-center px-2 py-4 md:py-5 w-[110px] sm:w-[130px] md:w-[150px] rounded-[1.25rem] group cursor-default shadow-xl"
-      style={{
-        background: "linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)",
-        border: "1px solid rgba(255,255,255,0.15)",
-        backdropFilter: "blur(12px)",
+      className="absolute inset-0 flex items-center justify-center text-center pointer-events-none"
+      initial={{ opacity: 0, scale: 1.2, filter: "blur(18px)" }}
+      animate={{
+        opacity: [0, 1, 1, 0],
+        scale: [1.2, 1, 1, 0.6],
+        filter: ["blur(18px)", "blur(0px)", "blur(0px)", "blur(12px)"],
+      }}
+      transition={{
+        duration: TIMING.titleDuration,
+        times: [0, 0.25, 0.6, 1],
+        ease: ["easeOut", "linear", "easeIn"],
       }}
     >
-      <div className="absolute inset-x-0 bottom-0 h-1/2 rounded-b-[1.25rem] bg-gradient-to-t from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-      <div className="absolute inset-0 rounded-[1.25rem] border border-white/0 group-hover:border-white/40 transition-colors duration-300 pointer-events-none shadow-[0_0_15px_rgba(255,255,255,0)] group-hover:shadow-[0_0_25px_rgba(255,255,255,0.25)]" />
-      
-      <span className="text-[36px] sm:text-[42px] md:text-[52px] mb-1.5 group-hover:scale-110 transition-transform duration-300 drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)]" style={{ transformOrigin: "center bottom" }}>
-        {member.emoji}
-      </span>
-      <span className="text-[14px] md:text-[18px] font-extrabold text-[#fdfcff] group-hover:text-white transition-colors duration-300 text-center leading-tight whitespace-nowrap drop-shadow-md">
-        {member.name}
-      </span>
+      <div className="relative">
+        <div className="text-[clamp(4.6rem,13vw,9rem)] font-black tracking-[0.25em] text-transparent bg-clip-text bg-gradient-to-b from-white via-cyan-200 to-emerald-200">
+          TỔ 3
+        </div>
+        <div className="absolute inset-0 text-[clamp(4.6rem,13vw,9rem)] font-black tracking-[0.25em] text-cyan-300/50 blur-[35px]">
+          TỔ 3
+        </div>
+        <div className="absolute left-1/2 top-full mt-3 -translate-x-1/2 text-[10px] md:text-[12px] uppercase tracking-[0.45em] text-white/60">
+          Hóa Học 10
+        </div>
+      </div>
     </motion.div>
   );
 }
 
-// ─── Main ──────────────────────────────────────────────────────────────────────
-export default function SlideTeam() {
-  const title = "TỔ 3".split("");
+function LeadEmblem() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.3, y: 30 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ duration: 1.6, ease: "easeOut", delay: TIMING.leadDelay }}
+      className="relative flex flex-col items-center"
+    >
+      <motion.div
+        className="absolute -inset-16 rounded-full"
+        style={{ border: "1px solid rgba(255,255,255,0.08)" }}
+        animate={{ rotate: 360 }}
+        transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
+      />
+      <motion.div
+        className="absolute -inset-24 rounded-full"
+        style={{ border: "1px dashed rgba(255,255,255,0.18)" }}
+        animate={{ rotate: -360 }}
+        transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+      />
+
+      <motion.div
+        animate={{ y: [0, -10, 0] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        className="text-[5rem] sm:text-[5.5rem] md:text-[6rem] drop-shadow-[0_0_35px_rgba(56,189,248,0.65)]"
+      >
+        {LEAD.emoji}
+      </motion.div>
+      <div className="mt-2 text-[34px] sm:text-[38px] md:text-[42px] font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-100 via-emerald-200 to-amber-300">
+        {LEAD.name}
+      </div>
+      <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
+        {LEAD.tags.map((tag) => (
+          <span
+            key={tag}
+            className="text-[11px] uppercase tracking-[0.35em] px-3 py-1 rounded-full border border-white/15 text-white/80"
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
+function MemberBadge({ member, tone }: { member: (typeof MEMBERS)[number]; tone: "inner" | "outer" }) {
+  const borderClass = tone === "inner" ? "border-cyan-300/35" : "border-amber-300/35";
+  const glow =
+    tone === "inner"
+      ? "radial-gradient(circle at 50% 0%, rgba(56,189,248,0.22), transparent 60%)"
+      : "radial-gradient(circle at 50% 0%, rgba(251,191,36,0.25), transparent 60%)";
 
   return (
-    <div className="relative w-full h-screen overflow-hidden flex flex-col items-center justify-center font-sans" style={{ backgroundColor: "#020008" }}>
-      <Starfield />
-      <AmbientOrbs />
-      
-      {/* Heavy vignette for cinematic look */}
-      <div className="absolute inset-0 pointer-events-none z-0" style={{ background: "radial-gradient(ellipse 120% 120% at 50% 40%, transparent 30%, #000000 100%)" }} />
+    <div
+      className={`group relative flex items-center gap-3 rounded-2xl border ${borderClass} bg-gradient-to-br from-slate-950/90 via-slate-900/80 to-slate-900/70 px-4 sm:px-5 py-3 sm:py-3.5 shadow-[0_20px_45px_rgba(0,0,0,0.45)] min-w-[150px] sm:min-w-[170px] md:min-w-[210px]`}
+    >
+      <div
+        className="absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{ background: glow }}
+      />
+      <div className="flex h-11 w-11 sm:h-13 sm:w-13 items-center justify-center rounded-xl bg-white/10 text-[28px] sm:text-[32px]">
+        {member.emoji}
+      </div>
+      <div className="text-[14px] sm:text-[16px] md:text-[18px] font-semibold text-white/90 whitespace-nowrap">
+        {member.name}
+      </div>
+    </div>
+  );
+}
 
-      {/* Content */}
-      <div className="relative z-10 flex flex-col items-center w-full px-4 max-w-[1600px]">
-        {/* Title Group - Kept at the top */}
-        <div className="flex flex-col items-center mb-6">
+function OrbitRing({
+  members,
+  radius,
+  duration,
+  delay,
+  tone,
+}: {
+  members: typeof MEMBERS;
+  radius: number;
+  duration: number;
+  delay: number;
+  tone: "inner" | "outer";
+}) {
+  return (
+    <motion.div
+      className="absolute inset-0 flex items-center justify-center"
+      animate={{ rotate: 360 }}
+      transition={{ duration, repeat: Infinity, ease: "linear", delay }}
+    >
+      {members.map((member, index) => {
+        const angle = (360 / members.length) * index - 90;
+        const { x, y } = polar(angle, radius);
+        return (
+          <motion.div
+            key={member.name}
+            className="absolute"
+            initial={{ opacity: 0, scale: 0.2, x: 0, y: 0 }}
+            animate={{ opacity: 1, scale: 1, x, y }}
+            transition={{
+              delay: TIMING.memberDelay + index * 0.12,
+              type: "spring",
+              stiffness: 160,
+              damping: 18,
+            }}
+          >
             <motion.div
-              initial={{ opacity: 0, y: -15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-              className="flex items-center gap-4 mb-2 lg:mt-4"
+              animate={{ rotate: -360 }}
+              transition={{ duration, repeat: Infinity, ease: "linear", delay }}
             >
-              <motion.div className="h-px w-20 md:w-32 bg-gradient-to-r from-transparent to-yellow-500" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 0.4 }} style={{ originX: 1 }} />
-              <span className="text-[10px] md:text-[12px] font-mono tracking-[0.4em] uppercase px-5 py-2 rounded-full border border-yellow-500/30 bg-yellow-500/10 text-yellow-200 shadow-[0_0_20px_rgba(234,179,8,0.15)] backdrop-blur-md">
-                ✦ Nhóm Thuyết Trình — Hóa Học 10 ✦
-              </span>
-              <motion.div className="h-px w-20 md:w-32 bg-gradient-to-l from-transparent to-yellow-500" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1, delay: 0.4 }} style={{ originX: 0 }} />
+              <MemberBadge member={member} tone={tone} />
             </motion.div>
+          </motion.div>
+        );
+      })}
+    </motion.div>
+  );
+}
 
-            <div className="flex justify-center items-center text-[clamp(3.5rem,6vw,5.5rem)] font-black tracking-tighter leading-none z-10" aria-label="TỔ 3">
-              {title.map((ch, i) => (
-                <motion.div key={i} className="relative inline-block">
-                  <motion.span
-                    initial={{ opacity: 0, y: 60, filter: "blur(20px)", scale: 0.8, rotateX: 45 }}
-                    animate={{ opacity: 1, y: 0, filter: "blur(0px)", scale: 1, rotateX: 0 }}
-                    transition={{ delay: 0.3 + i * 0.1, type: "spring", damping: 14, stiffness: 120 }}
-                    className="inline-block text-transparent bg-clip-text relative z-10"
-                    style={{
-                      backgroundImage: "linear-gradient(180deg, #ffffff 0%, #d8b4fe 50%, #9333ea 100%)",
-                      paddingRight: ch === " " ? "1.5rem" : "0.1rem",
-                      transformStyle: "preserve-3d"
-                    }}
-                  >
-                    {ch === " " ? "\u00A0" : ch}
-                  </motion.span>
-                  <motion.span
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 0.5 }}
-                    transition={{ delay: 0.6 + i * 0.1, duration: 1 }}
-                    className="absolute left-0 top-0 text-purple-600 blur-[30px] z-0 pointer-events-none"
-                  >
-                    {ch === " " ? "\u00A0" : ch}
-                  </motion.span>
-                </motion.div>
-              ))}
-            </div>
+export default function SlideTeam() {
+  return (
+    <div
+      className="relative min-h-screen w-full overflow-hidden"
+      style={{ fontFamily: "'Space Grotesk', 'Plus Jakarta Sans', system-ui, sans-serif" }}
+    >
+      <CinematicBackdrop />
+
+      <div className="relative z-10 flex min-h-screen w-full items-center justify-center px-4 py-8">
+        <div className="relative flex flex-col items-center gap-10">
+          <div
+            className="relative flex items-center justify-center"
+            style={{ width: "min(96vw, 980px)", height: "min(96vw, 980px)" }}
+          >
+            <TitleSequence />
+            <OrbitRing
+              members={INNER_RING}
+              radius={INNER_RADIUS}
+              duration={32}
+              delay={TIMING.orbitDelay}
+              tone="inner"
+            />
+            <OrbitRing
+              members={OUTER_RING}
+              radius={OUTER_RADIUS}
+              duration={44}
+              delay={TIMING.orbitDelay}
+              tone="outer"
+            />
+            <LeadEmblem />
+          </div>
+
         </div>
-
-        {/* 3-Column Layout: Left Members | Center Star | Right Members */}
-        <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-[40px] lg:gap-[60px] relative z-20">
-           
-           {/* Left Members Group (2x3 Grid) */}
-           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-[16px]">
-               {leftMembers.map((m, i) => <MemberCard key={m.name} member={m} index={i} />)}
-           </div>
-
-           {/* Star/Lead */}
-           <div className="flex-shrink-0 z-30 order-first lg:order-none scale-90 lg:scale-110 xl:scale-125 mb-4 lg:mb-0 lg:-mt-10">
-             <StarCard />
-           </div>
-
-           {/* Right Members Group (2x3 or 2x4 Grid) */}
-           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-[16px]">
-               {rightMembers.map((m, i) => <MemberCard key={m.name} member={m} index={i + 6} />)}
-           </div>
-        </div>
-
-        {/* Footnote */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2.2, duration: 1 }}
-          className="mt-8 lg:mt-12 text-white/30 font-mono text-[10px] md:text-[11px] tracking-[0.4em] uppercase"
-        >
-          {MEMBERS.length + 1} Thành Viên · Tổ 3 · Hóa Học 10
-        </motion.p>
       </div>
     </div>
   );
