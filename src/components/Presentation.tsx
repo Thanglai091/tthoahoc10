@@ -18,10 +18,9 @@ export function Presentation({ children, slides }: { children?: React.ReactNode,
   const { sfxVolume, setSfxVolume } = useAudioState();
 
   const handleVolumeToggle = () => {
-    // Cycle volume: 0.8 -> 0.4 -> 0 -> 0.8
-    if (sfxVolume >= 0.8) setSfxVolume(0.4);
-    else if (sfxVolume >= 0.4) setSfxVolume(0);
-    else setSfxVolume(0.8);
+    if (sfxVolume >= 10) setSfxVolume(5);
+    else if (sfxVolume >= 5) setSfxVolume(0);
+    else setSfxVolume(15);
     play("click"); // Audible feedback
   };
 
@@ -88,16 +87,30 @@ export function Presentation({ children, slides }: { children?: React.ReactNode,
           <ChevronRight className="w-6 h-6" />
         </button>
 
-        {/* Global Slide SFX Volume Toggle */}
-        <button
-          onClick={handleVolumeToggle}
-          className="absolute right-6 p-3 rounded-full bg-black/20 dark:bg-white/10 backdrop-blur-md border border-white/10 hover:bg-black/40 dark:hover:bg-white/20 transition-all"
-          aria-label="Toggle Volume"
-        >
-          {sfxVolume >= 0.8 ? <Volume2 className="w-5 h-5 text-green-400" /> : 
-           sfxVolume > 0 ? <Volume1 className="w-5 h-5 text-yellow-400" /> : 
-           <VolumeX className="w-5 h-5 text-red-500 opacity-50" />}
-        </button>
+        {/* Global Slide SFX Volume Toggle with Slider */}
+        <div className="absolute right-6 flex items-center gap-3 bg-black/20 dark:bg-white/10 backdrop-blur-md border border-white/10 rounded-full p-2 px-4 transition-all hover:bg-black/40 dark:hover:bg-white/20">
+          <button
+            onClick={handleVolumeToggle}
+            className="text-white/80 hover:text-white transition-all outline-none"
+            aria-label="Toggle Volume"
+            title="Điều chỉnh SFX Slider"
+          >
+            {sfxVolume >= 10 ? <Volume2 className="w-5 h-5 text-green-400" /> : 
+             sfxVolume > 0 ? <Volume1 className="w-5 h-5 text-yellow-400" /> : 
+             <VolumeX className="w-5 h-5 text-red-500 opacity-50" />}
+          </button>
+          
+          <input 
+            type="range" 
+            min="0" 
+            max="15" 
+            step="1"
+            value={sfxVolume}
+            onChange={(e) => setSfxVolume(parseInt(e.target.value))}
+            onMouseUp={() => play("click")}
+            className="w-24 h-1 bg-white/30 rounded-lg appearance-none cursor-pointer accent-orange-500"
+          />
+        </div>
       </div>
 
       {/* Progress Bar */}

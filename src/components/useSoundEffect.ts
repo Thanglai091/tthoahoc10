@@ -7,7 +7,8 @@ export type SoundType = "click" | "correct" | "wrong" | "success" | "slide" | "s
 
 export function useSoundEffect() {
   const audioContextRef = useRef<AudioContext | null>(null);
-  const { sfxVolume } = useAudioState();
+  const { sfxVolume: rawSfxVolume } = useAudioState();
+  const sfxVolume = rawSfxVolume / 5; // Level 5 is 1x. Level 15 is 3x (Loud)
 
   useEffect(() => {
     return () => {

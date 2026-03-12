@@ -15,8 +15,8 @@ interface AudioContextType {
 const AudioStateContext = createContext<AudioContextType | undefined>(undefined);
 
 export function AudioProvider({ children }: { children: React.ReactNode }) {
-  const [sfxVolume, setSfxVolume] = useState(0.8);
-  const [bgmVolume, setBgmVolume] = useState(0.3);
+  const [sfxVolume, setSfxVolume] = useState(8);
+  const [bgmVolume, setBgmVolume] = useState(5);
   const [isGameActive, setIsGameActive] = useState(false);
 
   return (

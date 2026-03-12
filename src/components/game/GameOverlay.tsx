@@ -53,21 +53,21 @@ export default function GameOverlay({ onClose }: GameOverlayProps) {
 
   useEffect(() => {
     if (bgmRef.current) {
-      bgmRef.current.volume = bgmVolume;
+      bgmRef.current.volume = Math.min((bgmVolume / 15) * 1.5, 1);
     }
   }, [bgmVolume]);
 
   const toggleSfx = () => {
-    if (sfxVolume >= 0.8) setSfxVolume(0.4);
-    else if (sfxVolume >= 0.4) setSfxVolume(0);
-    else setSfxVolume(0.8);
+    if (sfxVolume >= 10) setSfxVolume(5);
+    else if (sfxVolume >= 5) setSfxVolume(0);
+    else setSfxVolume(15);
     play("click");
   };
 
   const toggleBgm = () => {
-    if (bgmVolume >= 0.3) setBgmVolume(0.15);
-    else if (bgmVolume >= 0.15) setBgmVolume(0);
-    else setBgmVolume(0.3);
+    if (bgmVolume >= 10) setBgmVolume(5);
+    else if (bgmVolume >= 5) setBgmVolume(0);
+    else setBgmVolume(15);
     play("click");
   };
 
@@ -161,32 +161,53 @@ export default function GameOverlay({ onClose }: GameOverlayProps) {
       )}
 
       {/* Audio Controls */}
-      <div className="absolute top-5 left-5 z-[1001] flex gap-4">
-        <motion.button
-          className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"
-          onClick={toggleSfx}
-          onMouseEnter={() => play("hover")}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          title="Điều chỉnh SFX"
-        >
-          {sfxVolume >= 0.8 ? <Volume2 size={18} /> : 
-           sfxVolume > 0 ? <Volume1 size={18} /> : 
-           <VolumeX size={18} className="opacity-50" />}
-        </motion.button>
+      <div className="absolute top-5 left-5 z-[1001] flex flex-col gap-3">
+        {/* SFX Slider */}
+        <div className="flex items-center gap-3 bg-black/40 backdrop-blur-md border border-white/10 rounded-full p-2 px-4 shadow-lg hover:bg-black/60 transition-colors">
+          <motion.button
+            className="flex items-center justify-center text-white/80 hover:text-white transition-all outline-none"
+            onClick={toggleSfx}
+            onMouseEnter={() => play("hover")}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            title="Điều chỉnh SFX"
+          >
+            {sfxVolume >= 10 ? <Volume2 size={18} className="text-blue-400" /> : 
+             sfxVolume > 0 ? <Volume1 size={18} className="text-blue-200" /> : 
+             <VolumeX size={18} className="text-red-500 opacity-50" />}
+          </motion.button>
+          
+          <input 
+            type="range" min="0" max="15" step="1" value={sfxVolume}
+            onChange={(e) => setSfxVolume(parseInt(e.target.value))}
+            onMouseUp={() => play("click")}
+            title="Âm lượng hiệu ứng"
+            className="w-24 h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer accent-blue-500"
+          />
+        </div>
 
-        <motion.button
-          className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"
-          onClick={toggleBgm}
-          onMouseEnter={() => play("hover")}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          title="Điều chỉnh Nhạc Nền"
-        >
-          {bgmVolume >= 0.3 ? <Music size={18} /> : 
-           bgmVolume > 0 ? <Music2 size={18} /> : 
-           <Music size={18} className="opacity-50" />}
-        </motion.button>
+        {/* BGM Slider */}
+        <div className="flex items-center gap-3 bg-black/40 backdrop-blur-md border border-white/10 rounded-full p-2 px-4 shadow-lg hover:bg-black/60 transition-colors">
+          <motion.button
+            className="flex items-center justify-center text-white/80 hover:text-white transition-all outline-none"
+            onClick={toggleBgm}
+            onMouseEnter={() => play("hover")}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            title="Điều chỉnh Nhạc Nền"
+          >
+            {bgmVolume >= 10 ? <Music size={18} className="text-purple-400" /> : 
+             bgmVolume > 0 ? <Music2 size={18} className="text-purple-200" /> : 
+             <Music size={18} className="text-red-500 opacity-50" />}
+          </motion.button>
+          
+          <input 
+            type="range" min="0" max="15" step="1" value={bgmVolume}
+            onChange={(e) => setBgmVolume(parseInt(e.target.value))}
+            title="Âm lượng nhạc nền"
+            className="w-24 h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer accent-purple-500"
+          />
+        </div>
       </div>
 
       {/* Background Music */}

@@ -15,7 +15,31 @@ export default function Slide1() {
   const [sparks, setSparks] = useState<{ id: string; x: number; y: number; size: number; delay: number; duration: number; angle: number }[]>([]);
 
   useEffect(() => {
+    const audio = document.getElementById("slide1-bgm") as HTMLAudioElement;
+    if (audio) {
+      audio.volume = Math.min((bgmVolume / 15) * 1.5, 1);
+    }
+  }, [bgmVolume]);
+
+  useEffect(() => {
     setIsMounted(true);
+
+    const tryPlayAudio = () => {
+      const audio = document.getElementById("slide1-bgm") as HTMLAudioElement;
+      if (audio) {
+        // Set initial volume
+        audio.volume = Math.min((bgmVolume / 15) * 1.5, 1);
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            // Autoplay blocked, wait for user interaction
+            window.addEventListener('click', tryPlayAudio, { once: true });
+            window.addEventListener('keydown', tryPlayAudio, { once: true });
+          });
+        }
+      }
+    };
+    tryPlayAudio();
 
     // Generate slow rising, glowing embers
     const newEmbers = Array.from({ length: 100 }).map((_, i) => ({
@@ -46,7 +70,12 @@ export default function Slide1() {
     <div className="relative w-full h-[100vh] flex items-center justify-center overflow-hidden bg-[#020000] text-white font-sans perspective-[2500px]">
       
       {/* Background Fire Sound */}
-      <audio src="/audio/fire.mp3" autoPlay loop style={{ display: "none" }} ref={(el) => { if(el) el.volume = Math.min(bgmVolume * 1.5, 1); }} />
+      <audio 
+        id="slide1-bgm"
+        src="/audio/fire.mp3" 
+        loop 
+        style={{ display: "none" }} 
+      />
 
       {/* Pure CSS Cinematic Fire Background */}
       
