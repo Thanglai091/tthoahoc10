@@ -10,7 +10,7 @@ import { useAudioState } from "./AudioProvider";
 // import Slide2 from "./slides/Slide2";
 // ...
 
-const TOTAL_SLIDES = 20;
+const TOTAL_SLIDES = 21;
 
 export function Presentation({ children, slides }: { children?: React.ReactNode, slides: React.FC[] }) {
   const [currentSlide, setCurrentSlide] = useState(0);

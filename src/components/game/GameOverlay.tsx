@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import GameIntro from "./GameIntro";
 import GameMenu from "./GameMenu";
@@ -10,6 +10,7 @@ import Game2_PhanLoaiNo from "./games/Game2_PhanLoaiNo";
 import Game3_60Giay from "./games/Game3_60Giay";
 import Game4_NhietDo from "./games/Game4_NhietDo";
 import Game5_TrueFalse from "./games/Game5_TrueFalse";
+import FarewellScreen from "./FarewellScreen";
 import { X, Volume2, VolumeX, Volume1, Music, Music2 } from "lucide-react";
 import { useSoundEffect } from "../useSoundEffect";
 import { useAudioState } from "../AudioProvider";
@@ -48,6 +49,7 @@ export default function GameOverlay({ onClose }: GameOverlayProps) {
   const { sfxVolume, setSfxVolume, bgmVolume, setBgmVolume } = useAudioState();
   const [screen, setScreen] = useState<GameScreen>("intro");
   const [scores, setScores] = useState<GameScores>({});
+  const [showFarewell, setShowFarewell] = useState(false);
   
   const bgmRef = useRef<HTMLAudioElement>(null);
 
@@ -56,6 +58,17 @@ export default function GameOverlay({ onClose }: GameOverlayProps) {
       bgmRef.current.volume = Math.min((bgmVolume / 15) * 1.5, 1);
     }
   }, [bgmVolume]);
+
+  // Shift+E: toggle farewell screen
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.shiftKey && e.key === "E") {
+        setShowFarewell((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
 
   const toggleSfx = () => {
     if (sfxVolume >= 10) setSfxVolume(5);
@@ -233,6 +246,9 @@ export default function GameOverlay({ onClose }: GameOverlayProps) {
           {renderContent()}
         </motion.div>
       </AnimatePresence>
+
+      {/* Farewell Screen – hidden by default, toggle with Shift+E */}
+      <FarewellScreen visible={showFarewell} />
     </motion.div>
   );
 }
