@@ -58,26 +58,36 @@ export default function FarewellScreen({ visible }: FarewellScreenProps) {
 
   // Play applause / cheer sound when visible
   useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
     if (visible) {
-      // optional: nếu có file audio
-      // audioRef.current?.play();
+      audio.currentTime = 0;
+      const playPromise = audio.play();
+      if (playPromise) {
+        playPromise.catch(() => {});
+      }
+    } else {
+      audio.pause();
+      audio.currentTime = 0;
     }
   }, [visible]);
 
   return (
-    <AnimatePresence>
-      {visible && (
-        <motion.div
-          className="fixed inset-0 z-[2000] flex flex-col items-center justify-center overflow-hidden"
-          style={{
-            background:
-              "radial-gradient(ellipse at center, #0f0a1e 0%, #000000 100%)",
-          }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
-        >
+    <>
+      <audio ref={audioRef} src="/audio/votay.mp3" preload="auto" />
+      <AnimatePresence>
+        {visible && (
+          <motion.div
+            className="fixed inset-0 z-[2000] flex flex-col items-center justify-center overflow-hidden"
+            style={{
+              background:
+                "radial-gradient(ellipse at center, #0f0a1e 0%, #000000 100%)",
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
+          >
           {/* ── Starfield ── */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
             {Array.from({ length: 120 }).map((_, i) => (
@@ -255,8 +265,9 @@ export default function FarewellScreen({ visible }: FarewellScreenProps) {
               Nhấn Shift + E để ẩn màn hình này
             </motion.p>
           </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

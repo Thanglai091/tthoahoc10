@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { useAudioState } from "../AudioProvider";
 
 const MEMBERS = [
   { name: "Quốc Anh", emoji: "🦁" },
@@ -33,6 +35,13 @@ const TIMING = {
   memberDelay: 3.4,
   orbitDelay: 5.0,
 };
+
+const MEMBER_STAGGER = 0.12;
+const MEMBER_REVEAL_DURATION = 1.1;
+const MAX_RING_MEMBERS = Math.max(INNER_RING.length, OUTER_RING.length);
+const BONG_START_MS = TIMING.memberDelay * 1000;
+const BONG_END_MS =
+  (TIMING.memberDelay + (MAX_RING_MEMBERS - 1) * MEMBER_STAGGER + MEMBER_REVEAL_DURATION) * 1000;
 
 const INNER_RADIUS = 240;
 const OUTER_RADIUS = 380;
@@ -128,6 +137,8 @@ function LeadEmblem() {
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ duration: 1.6, ease: "easeOut", delay: TIMING.leadDelay }}
       className="relative flex flex-col items-center"
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
     >
       <motion.div
         className="absolute -inset-16 rounded-full"
@@ -166,7 +177,13 @@ function LeadEmblem() {
   );
 }
 
-function MemberBadge({ member, tone }: { member: (typeof MEMBERS)[number]; tone: "inner" | "outer" }) {
+function MemberBadge({
+  member,
+  tone,
+}: {
+  member: (typeof MEMBERS)[number];
+  tone: "inner" | "outer";
+}) {
   const borderClass = tone === "inner" ? "border-cyan-300/35" : "border-amber-300/35";
   const glow =
     tone === "inner"
@@ -174,8 +191,10 @@ function MemberBadge({ member, tone }: { member: (typeof MEMBERS)[number]; tone:
       : "radial-gradient(circle at 50% 0%, rgba(251,191,36,0.25), transparent 60%)";
 
   return (
-    <div
+    <motion.div
       className={`group relative flex items-center gap-3 rounded-2xl border ${borderClass} bg-gradient-to-br from-slate-950/90 via-slate-900/80 to-slate-900/70 px-4 sm:px-5 py-3 sm:py-3.5 shadow-[0_20px_45px_rgba(0,0,0,0.45)] min-w-[150px] sm:min-w-[170px] md:min-w-[210px]`}
+      whileHover={{ scale: 1.04, y: -3 }}
+      whileTap={{ scale: 0.98 }}
     >
       <div
         className="absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
@@ -187,7 +206,7 @@ function MemberBadge({ member, tone }: { member: (typeof MEMBERS)[number]; tone:
       <div className="text-[14px] sm:text-[16px] md:text-[18px] font-semibold text-white/90 whitespace-nowrap">
         {member.name}
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -220,10 +239,9 @@ function OrbitRing({
             initial={{ opacity: 0, scale: 0.2, x: 0, y: 0 }}
             animate={{ opacity: 1, scale: 1, x, y }}
             transition={{
-              delay: TIMING.memberDelay + index * 0.12,
-              type: "spring",
-              stiffness: 160,
-              damping: 18,
+              delay: TIMING.memberDelay + index * MEMBER_STAGGER,
+              duration: MEMBER_REVEAL_DURATION,
+              ease: "easeOut",
             }}
           >
             <motion.div
@@ -240,11 +258,69 @@ function OrbitRing({
 }
 
 export default function SlideTeam() {
+  const introAudioRef = useRef<HTMLAudioElement>(null);
+  const bongAudioRef = useRef<HTMLAudioElement>(null);
+  const { bgmVolume } = useAudioState();
+
+  useEffect(() => {
+    const introAudio = introAudioRef.current;
+    const bongAudio = bongAudioRef.current;
+
+    if (introAudio) {
+      introAudio.currentTime = 0;
+      const introPlay = introAudio.play();
+      if (introPlay) introPlay.catch(() => {});
+    }
+
+    const startBongTimeout = window.setTimeout(() => {
+      if (!bongAudio) return;
+      bongAudio.currentTime = 0;
+      bongAudio.loop = true;
+      const bongPlay = bongAudio.play();
+      if (bongPlay) bongPlay.catch(() => {});
+    }, BONG_START_MS);
+
+    const stopBongTimeout = window.setTimeout(() => {
+      if (!bongAudio) return;
+      bongAudio.pause();
+      bongAudio.currentTime = 0;
+      bongAudio.loop = false;
+    }, BONG_END_MS);
+
+    return () => {
+      window.clearTimeout(startBongTimeout);
+      window.clearTimeout(stopBongTimeout);
+      if (introAudio) {
+        introAudio.pause();
+        introAudio.currentTime = 0;
+      }
+      if (bongAudio) {
+        bongAudio.pause();
+        bongAudio.currentTime = 0;
+        bongAudio.loop = false;
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const introAudio = introAudioRef.current;
+    const bongAudio = bongAudioRef.current;
+    if (introAudio) {
+      introAudio.volume = Math.min((bgmVolume / 15) * 1.15, 1);
+    }
+    if (bongAudio) {
+      bongAudio.volume = Math.min((bgmVolume / 15) * 1.65, 1);
+    }
+  }, [bgmVolume]);
+
   return (
     <div
       className="relative min-h-screen w-full overflow-hidden"
       style={{ fontFamily: "'Space Grotesk', 'Plus Jakarta Sans', system-ui, sans-serif" }}
     >
+      <audio ref={introAudioRef} src="/audio/intro.mp3" preload="auto" loop />
+      <audio ref={bongAudioRef} src="/audio/bongbong.mp3" preload="auto" />
+
       <CinematicBackdrop />
 
       <div className="relative z-10 flex min-h-screen w-full items-center justify-center px-4 py-8">
@@ -270,7 +346,6 @@ export default function SlideTeam() {
             />
             <LeadEmblem />
           </div>
-
         </div>
       </div>
     </div>

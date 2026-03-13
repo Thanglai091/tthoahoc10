@@ -69,7 +69,7 @@ function GameCard({ game, score, onPlay, delay }: { game: typeof GAMES[0]; score
   return (
     <motion.div
       className="relative rounded-3xl overflow-hidden cursor-pointer group"
-      style={{ background: "rgba(255,255,255,0.04)", border: `2px solid ${played ? game.color + "55" : "rgba(255,255,255,0.09)"}` }}
+      style={{ background: "rgba(255,255,255,0.1)", border: `2px solid ${played ? game.color + "75" : "rgba(255,255,255,0.18)"}` }}
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.4 }}
