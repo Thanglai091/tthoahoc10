@@ -132,86 +132,12 @@ export default function GameOverlay({ onClose }: GameOverlayProps) {
   return (
     <motion.div
       className="fixed inset-0 z-[1000] overflow-hidden"
-      style={{ background: "#02010a" }}
+      style={{ background: "#0b1220" }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
-      {/* Cosmic Gradient Base */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(140% 120% at 50% 30%, rgba(15,23,42,0.22) 0%, rgba(2,6,23,0.8) 32%, rgba(2,6,23,0.96) 70%, #01010a 100%)",
-        }}
-      />
-
-      {/* Color Wave */}
-      <motion.div
-        className="absolute inset-[-25%] pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(120deg, rgba(56,189,248,0.08), rgba(14,165,233,0.03), rgba(167,139,250,0.08), rgba(14,165,233,0.04), rgba(56,189,248,0.08))",
-          backgroundSize: "220% 220%",
-          mixBlendMode: "screen",
-          opacity: 0.4,
-          filter: "blur(52px)",
-        }}
-        animate={{ backgroundPosition: ["0% 40%", "100% 60%", "0% 40%"] }}
-        transition={{ duration: 24, repeat: Infinity, ease: "easeInOut" }}
-      />
-
-      {/* Aurora Layer A */}
-      <motion.div
-        className="absolute inset-[-15%] pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at 18% 32%, rgba(34,211,238,0.18) 0%, rgba(34,211,238,0.03) 35%, transparent 62%), radial-gradient(ellipse at 78% 68%, rgba(129,140,248,0.16) 0%, rgba(129,140,248,0.04) 36%, transparent 66%)",
-          mixBlendMode: "screen",
-          opacity: 0.5,
-          filter: "blur(18px)",
-        }}
-        animate={{ x: ["-1%", "2%", "-1%"], y: ["1%", "-2%", "1%"], scale: [1, 1.04, 1] }}
-        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-      />
-
-      {/* Aurora Layer B */}
-      <motion.div
-        className="absolute inset-[-20%] pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at 40% 12%, rgba(244,114,182,0.1) 0%, rgba(244,114,182,0.02) 38%, transparent 70%), radial-gradient(ellipse at 62% 84%, rgba(45,212,191,0.1) 0%, rgba(45,212,191,0.02) 36%, transparent 72%)",
-          mixBlendMode: "screen",
-          opacity: 0.4,
-          filter: "blur(22px)",
-        }}
-        animate={{ x: ["2%", "-2%", "2%"], y: ["-1%", "2%", "-1%"], scale: [1.02, 1, 1.02] }}
-        transition={{ duration: 26, repeat: Infinity, ease: "easeInOut" }}
-      />
-
-      {/* Stars */}
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage:
-            "radial-gradient(1px 1px at 18% 22%, rgba(255,255,255,0.95) 0, transparent 70%), radial-gradient(1px 1px at 76% 18%, rgba(255,255,255,0.72) 0, transparent 70%), radial-gradient(1px 1px at 35% 72%, rgba(255,255,255,0.85) 0, transparent 70%), radial-gradient(1px 1px at 86% 58%, rgba(255,255,255,0.62) 0, transparent 70%), radial-gradient(1.6px 1.6px at 58% 42%, rgba(125,211,252,0.9) 0, transparent 72%), radial-gradient(1.6px 1.6px at 24% 84%, rgba(196,181,253,0.85) 0, transparent 72%)",
-          backgroundSize: "360px 360px",
-          opacity: 0.3,
-        }}
-        animate={{ backgroundPosition: ["0% 0%", "0% 100%"], opacity: [0.22, 0.35, 0.22] }}
-        transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-      />
-
-      {/* Vignette */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(circle at 50% 50%, rgba(0,0,0,0.12) 34%, rgba(0,0,0,0.62) 74%, rgba(0,0,0,0.86) 100%)",
-        }}
-      />
-
       {/* Close Button */}
       {screen !== "intro" && (
         <motion.button

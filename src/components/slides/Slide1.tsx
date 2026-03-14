@@ -207,7 +207,10 @@ export default function Slide1() {
             <div className="h-[1px] w-16 bg-gradient-to-l from-transparent to-orange-500" />
           </motion.div>
 
-          <h1 className="text-[5rem] md:text-[8rem] lg:text-[10rem] font-sans font-black leading-none mb-8 tracking-tighter">
+          <h1
+            className="text-[5rem] md:text-[8rem] lg:text-[10rem] font-black leading-[1.08] mb-8 tracking-[-0.03em]"
+            style={{ fontFamily: "'Segoe UI', 'Arial', 'Helvetica', sans-serif" }}
+          >
             <motion.span 
               className="inline-block text-orange-50 px-4"
               initial={{ opacity: 0, filter: "blur(20px)", scale: 1.1 }}

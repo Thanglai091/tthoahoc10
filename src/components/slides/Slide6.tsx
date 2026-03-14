@@ -37,22 +37,32 @@ export default function Slide6() {
   ];
 
   return (
-    <div className="relative w-full h-[100vh] flex flex-col items-center justify-center p-12 bg-black text-white overflow-hidden font-sans">
+    <div className="relative w-full h-[100vh] flex flex-col items-center justify-center p-12 text-white overflow-hidden font-sans bg-gradient-to-b from-[#080d1a] via-[#12070a] to-[#090305]">
       
-      {/* Immersive Fire/Heat Background */}
-      <motion.div 
-        className="absolute inset-0 bg-[radial-gradient(circle_at_50%_100%,rgba(153,27,27,0.15)_0%,rgba(0,0,0,1)_80%)] z-0 pointer-events-none"
-        animate={{ opacity: [0.6, 1, 0.6] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+      {/* Cinematic Background */}
+      <motion.div
+        className="absolute inset-0 z-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(120% 100% at 50% 88%, rgba(239,68,68,0.28) 0%, rgba(20,8,12,0.75) 48%, rgba(8,11,24,0.9) 100%)",
+        }}
+        animate={{ opacity: [0.72, 1, 0.78] }}
+        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
       />
-      <motion.div 
-        className="absolute -bottom-[30%] -left-[10%] w-[120%] h-[60%] bg-[radial-gradient(ellipse_at_center,rgba(234,88,12,0.1)_0%,transparent_70%)] blur-[60px] z-0 pointer-events-none"
-        animate={{ scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      <motion.div
+        className="absolute -top-32 left-1/2 h-[46vh] w-[64vw] -translate-x-1/2 rounded-full bg-red-500/20 blur-[110px] z-0 pointer-events-none"
+        animate={{ opacity: [0.45, 0.7, 0.45], scale: [1, 1.08, 1] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
       />
-      
+      <motion.div
+        className="absolute -bottom-28 left-1/2 h-[42vh] w-[72vw] -translate-x-1/2 rounded-full bg-orange-500/20 blur-[100px] z-0 pointer-events-none"
+        animate={{ opacity: [0.35, 0.62, 0.35], scale: [1.02, 1, 1.02] }}
+        transition={{ duration: 9.5, repeat: Infinity, ease: "easeInOut" }}
+      />
+
       {/* Background ambient noise for texture */}
-      <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none mix-blend-screen" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} />
+      <div className="absolute inset-0 z-0 opacity-[0.028] pointer-events-none mix-blend-screen" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} />
+      <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_35%,rgba(0,0,0,0.65)_78%,rgba(0,0,0,0.84)_100%)]" />
 
       <motion.h2 
         className="relative z-10 text-4xl md:text-6xl font-black mb-20 text-center uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600 drop-shadow-[0_0_15px_rgba(249,115,22,0.8)]"
@@ -65,56 +75,35 @@ export default function Slide6() {
 
       {/* Interactive Triangle Container */}
       <div className="relative z-10 w-[400px] h-[346px] md:w-[600px] md:h-[520px] mx-auto mt-10">
-        
-        {/* SVG Triangle Paths */}
-        <svg className="absolute inset-0 w-full h-full overflow-visible pointer-events-none" viewBox="0 0 100 86.6">
-          <defs>
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-              <feMerge>
-                <feMergeNode in="coloredBlur"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
-          </defs>
-          
-          {/* Base dull triangle */}
-          <polygon points="50,0 0,86.6 100,86.6" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5" />
-          
-          {/* Glowing animated triangle depending on hover state */}
-          <motion.polygon 
-            points="50,0 0,86.6 100,86.6" 
-            fill="none" 
-            stroke="url(#glowGradient)" 
-            strokeWidth="2"
-            filter="url(#glow)"
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ 
-              pathLength: 1, 
-              opacity: hoveredNode !== null ? 1 : 0.3,
-            }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
-          />
-
-          {/* LED moving dot along the triangle */}
-          <motion.polygon 
-            points="50,0 0,86.6 100,86.6" 
-            fill="none" 
-            stroke="white" 
-            strokeWidth="3"
+        {/* Warning sign animated borders */}
+        <svg
+          className="absolute inset-0 w-full h-full pointer-events-none z-0"
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+          style={{ overflow: "visible" }}
+        >
+          <motion.polygon
+            points="50,0 0,100 100,100"
+            fill="none"
+            stroke="#ef4444"
+            strokeWidth="2.5"
+            strokeDasharray="20 20"
             strokeLinecap="round"
-            filter="url(#glow)"
-            strokeDasharray="20 280"
-            animate={{ strokeDashoffset: [300, 0] }}
-            transition={{ duration: 4, ease: "linear", repeat: Infinity }}
+            animate={{ strokeDashoffset: [40, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+            style={{ filter: "drop-shadow(0 0 8px rgba(239, 68, 68, 1))" }}
           />
-
-          <linearGradient id="glowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor={nodes[1].color} />
-            <stop offset="50%" stopColor={nodes[0].color} />
-            <stop offset="100%" stopColor={nodes[2].color} />
-          </linearGradient>
         </svg>
+
+        {[{ left: "50%", top: "0%" }, { left: "0%", top: "100%" }, { left: "100%", top: "100%" }].map((vertex) => (
+          <motion.div
+            key={`${vertex.left}-${vertex.top}`}
+            className="absolute h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-red-400/90 pointer-events-none"
+            style={{ left: vertex.left, top: vertex.top, boxShadow: "0 0 18px rgba(248,113,113,0.9)" }}
+            animate={{ opacity: [0.45, 1, 0.45], scale: [0.92, 1.12, 0.92] }}
+            transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+          />
+        ))}
 
         {/* Nodes */}
         {nodes.map((node) => (

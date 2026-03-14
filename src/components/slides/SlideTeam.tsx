@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import { useAudioState } from "../AudioProvider";
 
 const MEMBERS = [
+  { name: "Minh Toàn", emoji: "👑" },
   { name: "Quốc Anh", emoji: "🦁" },
   { name: "Trần Thịnh", emoji: "⚡" },
   { name: "Anh Thư", emoji: "🌸" },
@@ -20,14 +21,9 @@ const MEMBERS = [
   { name: "Thanh Thùy", emoji: "🎯" },
 ];
 
-const LEAD = {
-  name: "Minh Toàn",
-  emoji: "👑",
-  tags: ["Làm Dự Án", "Thuyết Trình"],
-};
-
-const INNER_RING = MEMBERS.slice(0, 6);
-const OUTER_RING = MEMBERS.slice(6);
+const RING_SPLIT_INDEX = Math.ceil(MEMBERS.length / 2);
+const INNER_RING = MEMBERS.slice(0, RING_SPLIT_INDEX);
+const OUTER_RING = MEMBERS.slice(RING_SPLIT_INDEX);
 
 const TIMING = {
   titleDuration: 3.2,
@@ -115,12 +111,20 @@ function TitleSequence() {
         ease: ["easeOut", "linear", "easeIn"],
       }}
     >
-      <div className="relative">
-        <div className="text-[clamp(4.6rem,13vw,9rem)] font-black tracking-[0.25em] text-transparent bg-clip-text bg-gradient-to-b from-white via-cyan-200 to-emerald-200">
-          TỔ 3
+      <div className="relative flex flex-col items-center gap-2">
+        <div className="text-[clamp(2.2rem,6.2vw,4.1rem)] font-black tracking-[0.22em] text-transparent bg-clip-text bg-gradient-to-b from-white via-cyan-200 to-emerald-200 uppercase">
+          Nhóm
         </div>
-        <div className="absolute inset-0 text-[clamp(4.6rem,13vw,9rem)] font-black tracking-[0.25em] text-cyan-300/50 blur-[35px]">
-          TỔ 3
+        <div className="text-[clamp(2.8rem,8vw,5.4rem)] font-black tracking-[0.2em] text-transparent bg-clip-text bg-gradient-to-r from-cyan-100 via-emerald-200 to-amber-300 uppercase">
+          Thuyết Trình
+        </div>
+        <div className="absolute inset-0 flex flex-col items-center gap-2 pointer-events-none">
+          <div className="text-[clamp(2.2rem,6.2vw,4.1rem)] font-black tracking-[0.22em] text-cyan-300/40 blur-[24px] uppercase">
+            Nhóm
+          </div>
+          <div className="text-[clamp(2.8rem,8vw,5.4rem)] font-black tracking-[0.2em] text-cyan-300/45 blur-[28px] uppercase">
+            Thuyết Trình
+          </div>
         </div>
         <div className="absolute left-1/2 top-full mt-3 -translate-x-1/2 text-[10px] md:text-[12px] uppercase tracking-[0.45em] text-white/60">
           Hóa Học 10
@@ -130,13 +134,13 @@ function TitleSequence() {
   );
 }
 
-function LeadEmblem() {
+function TeamCore() {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.3, y: 30 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ duration: 1.6, ease: "easeOut", delay: TIMING.leadDelay }}
-      className="relative flex flex-col items-center"
+      className="relative flex flex-col items-center justify-center"
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
     >
@@ -156,23 +160,12 @@ function LeadEmblem() {
       <motion.div
         animate={{ y: [0, -10, 0] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        className="text-[5rem] sm:text-[5.5rem] md:text-[6rem] drop-shadow-[0_0_35px_rgba(56,189,248,0.65)]"
+        className="relative"
       >
-        {LEAD.emoji}
+        <div className="text-[2.8rem] sm:text-[3.2rem] md:text-[3.8rem] font-black tracking-[0.22em] text-transparent bg-clip-text bg-gradient-to-r from-cyan-100 via-emerald-200 to-amber-300 uppercase drop-shadow-[0_0_28px_rgba(56,189,248,0.35)]">
+          Tổ 3
+        </div>
       </motion.div>
-      <div className="mt-2 text-[34px] sm:text-[38px] md:text-[42px] font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-100 via-emerald-200 to-amber-300">
-        {LEAD.name}
-      </div>
-      <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
-        {LEAD.tags.map((tag) => (
-          <span
-            key={tag}
-            className="text-[11px] uppercase tracking-[0.35em] px-3 py-1 rounded-full border border-white/15 text-white/80"
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
     </motion.div>
   );
 }
@@ -314,10 +307,7 @@ export default function SlideTeam() {
   }, [bgmVolume]);
 
   return (
-    <div
-      className="relative min-h-screen w-full overflow-hidden"
-      style={{ fontFamily: "'Space Grotesk', 'Plus Jakarta Sans', system-ui, sans-serif" }}
-    >
+    <div className="relative min-h-screen w-full overflow-hidden font-sans">
       <audio ref={introAudioRef} src="/audio/intro.mp3" preload="auto" loop />
       <audio ref={bongAudioRef} src="/audio/bongbong.mp3" preload="auto" />
 
@@ -344,7 +334,7 @@ export default function SlideTeam() {
               delay={TIMING.orbitDelay}
               tone="outer"
             />
-            <LeadEmblem />
+            <TeamCore />
           </div>
         </div>
       </div>

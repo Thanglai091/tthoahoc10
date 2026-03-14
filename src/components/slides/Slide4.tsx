@@ -94,88 +94,77 @@ export default function Slide4() {
       ))}
 
       {/* Floating UI Elements Container */}
-      <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-12 pointer-events-none">
-        
-        {/* Title */}
+      <div className="absolute inset-0 z-20 flex flex-col items-center justify-center px-6 md:px-10 py-10 pointer-events-none">
         <motion.div
-           style={{ y: textFloatY, translateZ: 100 }}
-           className="text-center mb-16 transform-style-3d relative"
+          style={{ y: textFloatY, translateZ: 90 }}
+          className="w-full max-w-6xl mb-10 md:mb-12"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: "easeOut" }}
         >
-          {/* Backing flame glow for text */}
-          <motion.div 
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-orange-600/30 blur-[80px] -z-10 rounded-full mix-blend-screen"
-            animate={{ opacity: [0.4, 0.8, 0.4] }}
-            transition={{ duration: 3, repeat: Infinity }}
-          />
-          <motion.h2 
-            className="text-7xl md:text-[8rem] font-black uppercase tracking-tighter leading-none text-transparent bg-clip-text bg-gradient-to-b from-white to-orange-500 drop-shadow-[0_20px_40px_rgba(234,88,12,0.8)]"
-            initial={{ opacity: 0, scale: 0.8, rotateX: -20 }}
-            animate={{ opacity: 1, scale: 1, rotateX: 0 }}
-            transition={{ duration: 1.5, type: "spring", bounce: 0.4 }}
+          <div className="inline-flex items-center gap-3 rounded-full border border-orange-400/35 bg-black/35 px-4 py-1.5 backdrop-blur-md">
+            <span className="h-2 w-2 rounded-full bg-orange-400 shadow-[0_0_10px_rgba(251,146,60,0.9)]" />
+            <span className="text-[11px] md:text-xs tracking-[0.22em] font-semibold uppercase text-orange-200/90">
+              Tình Huống Thực Tế
+            </span>
+          </div>
+
+          <motion.h2
+            className="mt-5 text-5xl md:text-7xl lg:text-8xl font-black leading-[1.02] tracking-[-0.02em] text-transparent bg-clip-text bg-gradient-to-b from-zinc-50 via-emerald-100 to-cyan-200 drop-shadow-[0_12px_30px_rgba(16,185,129,0.38)]"
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.1, delay: 0.15 }}
           >
             Lá Phổi Xanh
           </motion.h2>
-          <motion.p 
-            className="text-3xl font-light text-orange-200 tracking-[0.3em] mt-4 uppercase drop-shadow-[0_0_10px_rgba(249,115,22,1)]"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1, duration: 1 }}
-          >
+
+          <p className="mt-3 text-lg md:text-2xl text-orange-100/90 font-medium tracking-[0.12em] uppercase">
             Rừng Amazon Bốc Cháy
-          </motion.p>
+          </p>
+
+          <p className="mt-4 max-w-4xl text-base md:text-lg text-zinc-200/85 leading-relaxed">
+            Cháy rừng không chỉ là mất cây xanh, mà còn làm suy yếu khả năng điều hòa khí hậu toàn cầu và đẩy nhanh phát thải khí nhà kính.
+          </p>
         </motion.div>
 
-        {/* Info Cards (Glassmorphism + Interactive Hover) */}
-        <div className="flex flex-col md:flex-row gap-8 w-full max-w-6xl mt-8 pointer-events-auto">
-          
-          <motion.div 
-            className="flex-1 bg-gradient-to-br from-green-950/60 to-black/80 backdrop-blur-xl border border-green-500/30 p-10 rounded-[40px] shadow-[0_30px_60px_rgba(0,0,0,0.6)] relative overflow-hidden group cursor-default"
-            initial={{ opacity: 0, x: -100 }}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-6xl pointer-events-auto">
+          <motion.div
+            className="relative overflow-hidden rounded-2xl border border-emerald-400/30 bg-zinc-950/70 backdrop-blur-lg p-7 md:p-8 shadow-[0_18px_40px_rgba(0,0,0,0.45)]"
+            initial={{ opacity: 0, x: -48 }}
             animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.25 }}
             onMouseEnter={() => play("hover")}
-            whileHover={{ scale: 1.05, borderColor: "rgba(74,222,128,0.8)", boxShadow: "0 0 50px rgba(74,222,128,0.4)", y: -10 }}
-            transition={{ opacity: { delay: 0.5 }, x: { delay: 0.5 }, default: { type: "spring", stiffness: 300, damping: 20 } }}
-            style={{ translateZ: 50 }}
+            whileHover={{ y: -5, scale: 1.015, borderColor: "rgba(16,185,129,0.65)" }}
+            style={{ translateZ: 45 }}
           >
-            <div className="absolute top-0 right-0 w-48 h-48 bg-green-500/20 rounded-full blur-[60px] -translate-y-1/2 translate-x-1/2 group-hover:bg-green-400/50 transition-colors duration-500" />
-            
-            {/* Ambient scanline over card */}
-            <motion.div 
-              className="absolute left-0 w-full h-1 bg-green-400/50 shadow-[0_0_10px_rgba(74,222,128,0.8)] opacity-0 group-hover:opacity-100"
-              animate={{ top: ["0%", "100%", "0%"] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-            />
+            <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-emerald-400/70 to-transparent" />
+            <div className="text-xs uppercase tracking-[0.2em] text-emerald-300/90 font-semibold">Vai Trò Khí Hậu</div>
+            <div className="mt-4 text-4xl md:text-5xl font-black text-emerald-300 leading-none">2 TỶ TẤN CO₂</div>
+            <div className="mt-1 text-sm text-emerald-100/70 uppercase tracking-[0.14em]">Lượng hấp thụ mỗi năm</div>
 
-            <p className="text-2xl text-green-50 font-light leading-relaxed relative z-10 transition-colors group-hover:text-white">
-              Mỗi năm lưu giữ tới <strong className="text-green-400 text-4xl block my-3 drop-shadow-[0_0_15px_rgba(74,222,128,0.8)] filter group-hover:brightness-150 transition-all">2 TỶ TẤN CO₂</strong>
-              Hàng tỷ cây giải phóng hơi nước tạo mây, ảnh hưởng sâu sắc tới thời tiết và sinh thái toàn cầu.
+            <p className="mt-5 text-[1.05rem] text-zinc-100/90 leading-relaxed">
+              Hệ sinh thái Amazon lưu trữ carbon quy mô lớn và giải phóng hơi nước tạo mây, góp phần ổn định chu trình mưa của Nam Mỹ.
             </p>
           </motion.div>
 
-          <motion.div 
-            className="flex-1 bg-gradient-to-br from-orange-950/60 to-black/80 backdrop-blur-xl border border-orange-500/30 p-10 rounded-[40px] shadow-[0_30px_60px_rgba(0,0,0,0.6)] relative overflow-hidden group cursor-default"
-            initial={{ opacity: 0, x: 100 }}
+          <motion.div
+            className="relative overflow-hidden rounded-2xl border border-orange-400/30 bg-zinc-950/70 backdrop-blur-lg p-7 md:p-8 shadow-[0_18px_40px_rgba(0,0,0,0.45)]"
+            initial={{ opacity: 0, x: 48 }}
             animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
             onMouseEnter={() => play("hover")}
-            whileHover={{ scale: 1.05, borderColor: "rgba(249,115,22,0.8)", boxShadow: "0 0 50px rgba(249,115,22,0.4)", y: -10 }}
-            transition={{ opacity: { delay: 0.7 }, x: { delay: 0.7 }, default: { type: "spring", stiffness: 300, damping: 20 } }}
-            style={{ translateZ: 80 }}
+            whileHover={{ y: -5, scale: 1.015, borderColor: "rgba(251,146,60,0.65)" }}
+            style={{ translateZ: 65 }}
           >
-             <div className="absolute top-0 right-0 w-48 h-48 bg-orange-500/20 rounded-full blur-[60px] -translate-y-1/2 translate-x-1/2 group-hover:bg-red-500/50 transition-colors duration-500" />
-            
-            {/* Ambient scanline over card */}
-            <motion.div 
-              className="absolute left-0 w-full h-1 bg-orange-400/50 shadow-[0_0_10px_rgba(249,115,22,0.8)] opacity-0 group-hover:opacity-100"
-              animate={{ top: ["0%", "100%", "0%"] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-            />
+            <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-orange-400/70 to-transparent" />
+            <div className="text-xs uppercase tracking-[0.2em] text-orange-300/90 font-semibold">Đa Dạng Sinh Học</div>
+            <div className="mt-4 text-4xl md:text-5xl font-black text-orange-300 leading-none">20% LOÀI THỰC VẬT</div>
+            <div className="mt-1 text-sm text-orange-100/70 uppercase tracking-[0.14em]">Tập trung tại Amazon</div>
 
-            <p className="text-2xl text-orange-50 font-light leading-relaxed relative z-10 transition-colors group-hover:text-white">
-              Nơi sinh sống của <strong className="text-orange-400 text-4xl block my-3 drop-shadow-[0_0_15px_rgba(249,115,22,0.8)] filter group-hover:brightness-150 transition-all">20% LOÀI THỰC VẬT</strong>
-              trên Trái Đất. Việc cháy rừng phá vỡ toàn bộ hệ thống sinh thái mong manh này, giải phóng khí thải nhà kính khổng lồ.
+            <p className="mt-5 text-[1.05rem] text-zinc-100/90 leading-relaxed">
+              Cháy rừng phá hủy nơi cư trú, làm đứt gãy chuỗi thức ăn và giải phóng lượng lớn khí nhà kính, gia tăng rủi ro thời tiết cực đoan.
             </p>
           </motion.div>
-
         </div>
       </div>
     </div>
