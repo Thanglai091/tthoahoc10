@@ -43,7 +43,7 @@ export default function Slide10() {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5, duration: 1 }}
       >
-        [ MÔ PHỎNG SỨC ÉP VẬT LÝ ]
+        [ VỤ NỔ HÓA HỌC CẢNG BEIRUT ]
       </motion.h2>
 
       <div className="relative w-full max-w-5xl rounded-2xl flex items-center justify-center">
@@ -73,8 +73,8 @@ export default function Slide10() {
           <div className="bg-black w-full h-full rounded-2xl overflow-hidden border border-cyan-900 shadow-[0_0_30px_rgba(6,182,212,0.3)]">
             {/* Same VideoPlayer component used previously */}
             <VideoPlayer 
-              videoId="El40ZpRA9wc" 
-              title="Sức ép nổ vật lý" 
+              videoId="63r6tXuyIBQ" 
+              title="Vụ nổ hóa học cảng Beirut" 
             />
           </div>
         </motion.div>
