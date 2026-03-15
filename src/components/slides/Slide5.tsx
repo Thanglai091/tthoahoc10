@@ -75,7 +75,7 @@ export default function Slide5() {
           animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           transition={{ duration: 1.5, ease: "easeOut" }}
         >
-          Thảm Họa Thực Tế
+          Bài Giảng
         </motion.h2>
 
         {/* The Frame Container */}
@@ -94,8 +94,8 @@ export default function Slide5() {
             
             <div className="w-full h-full isolate z-10 relative">
               <VideoPlayer 
-                videoId="-jSy_p7iAcc" 
-                title="Video Thực Tế Thảm Họa Cháy" 
+                videoId="WkJGQL0WpQQ" 
+                title="Video Bài Giảng" 
               />
             </div>
           </div>

@@ -109,7 +109,7 @@ export default function Slide14() {
           >
             {/* The Equation Stamped */}
             <div className="text-xl md:text-3xl font-black text-yellow-400 drop-shadow-[0_0_40px_rgba(250,204,21,1)] bg-red-950/40 px-12 py-8 rounded-3xl border border-yellow-500/50 backdrop-blur-sm max-w-full overflow-x-auto">
-              <BlockMath math={"C_7H_5N_3O_6(s) \\rightarrow 6CO(g) + \\frac{5}{2}H_2(g) + \\frac{3}{2}N_2(g) + C(s)"} />
+              <BlockMath math={"C_7H_5N_3O_6(s) \\rightarrow 6CO(g) + \\frac{5}{2}H_2(g) + \\frac{3}{2}N_2(g) + C(s) \\qquad \\Delta_rH^\\circ_{298} = -1217,52\\text{ kJ}"} />
             </div>
 
             {/* Glowing Definition Card */}

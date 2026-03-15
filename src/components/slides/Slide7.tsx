@@ -33,7 +33,7 @@ const Shard = ({ index }: { index: number }) => {
       transition={{ duration: 1.5, ease: "easeOut" }}
       style={{ filter: "blur(2px)", pointerEvents: "none" }}
     >
-      NỔ
+      CHÁY
     </motion.div>
   );
 };
@@ -104,7 +104,7 @@ export default function Slide7() {
             transition={{ duration: 1.5, ease: "easeInOut" }}
             style={{ filter: "drop-shadow(0 0 100px rgba(220, 38, 38, 1))" }}
           >
-            NỔ
+            CHÁY
           </motion.div>
         ) : (
           <div className="w-full flex flex-col items-center">
@@ -120,10 +120,10 @@ export default function Slide7() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.5, duration: 1, type: "spring" }}
             >
-              <h2 className="text-5xl md:text-7xl text-white font-black uppercase tracking-widest mb-6 drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">Khái niệm Nổ</h2>
+              <h2 className="text-5xl md:text-7xl text-white font-black uppercase tracking-widest mb-6 drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">Khái niệm Cháy</h2>
               <div className="bg-red-950/40 backdrop-blur-md p-6 rounded-2xl border border-red-500/50 shadow-[0_0_30px_rgba(220,38,38,0.3)] inline-block">
                 <p className="text-2xl text-red-100 leading-relaxed font-light">
-                  Giãn nở thể tích đột ngột trong <strong className="text-red-400 text-3xl mx-2 font-black">TÍCH TẮC</strong> gây áp suất hủy diệt.
+                  Xăng dễ cháy hơn dầu, dầu dễ cháy hơn than. Để đánh giá khả năng cháy của các chất, người ta đưa ra 1 số khái niệm sau đây:
                 </p>
               </div>
             </motion.div>
