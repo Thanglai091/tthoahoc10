@@ -73,7 +73,7 @@ export default function Slide10() {
           <div className="bg-black w-full h-full rounded-2xl overflow-hidden border border-cyan-900 shadow-[0_0_30px_rgba(6,182,212,0.3)]">
             {/* Same VideoPlayer component used previously */}
             <VideoPlayer 
-              videoId="63r6tXuyIBQ" 
+              videoId="63r6tXuylBQ" 
               title="Vụ nổ hóa học cảng Beirut" 
             />
           </div>
